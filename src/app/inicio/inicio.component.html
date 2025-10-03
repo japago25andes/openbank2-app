@@ -1,0 +1,45 @@
+<mat-toolbar color="primary">
+  <span>{{ cliente || 'OpenBank2' }}</span>
+</mat-toolbar>
+
+<div class="p-3">
+  <div class="grid">
+    <div class="col-12 md:col-6">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Bienvenido</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p *ngIf="!cliente">Este es tu primer componente con Angular Material y PrimeFlex 🚀</p>
+          <div *ngIf="cliente">
+            <p><strong>Cliente:</strong> {{ entidad.razon_social }}</p>
+            <p><strong>NIT:</strong> {{ entidad.nit }}</p>
+            <p><strong>Código Entidad:</strong> {{ entidad.cod_entidad }}</p>
+            <p><strong>Nombre Comercial:</strong> {{ entidad.nombre_comercial }}</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="col-12 md:col-6">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Información de Colores</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="entidad.colores.length > 0; else noColores">
+            <p><strong>Colores aplicados:</strong></p>
+            <ul>
+              <li *ngFor="let color of entidad.colores">
+                <strong>{{ color.llave }}:</strong> {{ color.valor }}
+              </li>
+            </ul>
+          </div>
+          <ng-template #noColores>
+            <button mat-raised-button color="accent" (click)="testUrl()">Probar con ?Entidad=11001</button>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
