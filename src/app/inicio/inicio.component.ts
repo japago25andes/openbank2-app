@@ -53,27 +53,35 @@ export class InicioComponent implements OnInit {
       this.requestEntidad = params['Entidad'];
 
       if (this.requestEntidad) {
-        console.log('Código de entidad recibido:', this.requestEntidad);
+        // Primero hacer login para obtener el token
+        this.inicioService.login().subscribe({
+          next: (authResponse) => {
+            if (authResponse.resultado) {
+              // Ahora buscar la entidad con el token ya guardado
+              this.inicioService.getEntidad(this.requestEntidad).subscribe({
+                next: (entidad) => {
+                  this.entidad = entidad;
+                  this.cliente = entidad.razon_social;
 
-        this.inicioService.getEntidad(this.requestEntidad).subscribe({
-          next: (entidad) => {
-            console.log('Datos de entidad recibidos:', entidad);
-            this.entidad = entidad;
-            this.cliente = entidad.razon_social;
-
-            // Aplicar colores dinámicamente
-            console.log('Aplicando colores:', entidad.colores);
-            entidad.colores.forEach(color => {
-              document.documentElement.style.setProperty(color.llave, color.valor);
-              console.log(`Aplicado: ${color.llave} = ${color.valor}`);
-            });
+                  // Aplicar colores dinámicamente
+                  entidad.colores.forEach(color => {
+                    document.documentElement.style.setProperty(color.llave, color.valor);
+                  });
+                },
+                error: (error) => {
+                  // Error al obtener entidad
+                }
+              });
+            } else {
+              // Error en login
+            }
           },
           error: (error) => {
-            console.error('Error al obtener entidad:', error);
+            // Error en login
           }
         });
       } else {
-        console.log('No se recibió código de entidad en los parámetros de la URL');
+        // No se recibió código de entidad
       }
     });
   }

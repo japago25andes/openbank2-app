@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { Autentica, Entidad, LoginRequest, BuscarEntidadRequest } from './inicio.interface';
 
 @Injectable({
@@ -17,9 +17,9 @@ export class InicioService {
   constructor(private http: HttpClient) { }
 
   /**
-   * Realiza el login y obtiene el token de autenticación
+   * Realiza el login y guarda el token en sessionStorage
    */
-  private login(): Observable<Autentica> {
+  login(): Observable<Autentica> {
     const url = `${this.baseUrl}/login`;
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -27,8 +27,12 @@ export class InicioService {
 
     return this.http.post<Autentica>(url, this.loginCredentials, { headers })
       .pipe(
+        tap(response => {
+          if (response.resultado && response.token) {
+            sessionStorage.setItem('auth_token', response.token);
+          }
+        }),
         catchError(error => {
-          console.error('Error en login:', error);
           return throwError(() => error);
         })
       );
@@ -39,29 +43,21 @@ export class InicioService {
    * @param codigoEntidad - Código de la entidad a buscar
    */
   getEntidad(codigoEntidad: string): Observable<Entidad> {
-    return this.login().pipe(
-      switchMap(authResponse => {
-        if (!authResponse.resultado) {
-          return throwError(() => new Error('Error en autenticación: ' + authResponse.mensaje));
-        }
+    const url = `${this.baseUrl}/entidad/Buscar`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
 
-        const url = `${this.baseUrl}/entidad/Buscar`;
-        const headers = new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authResponse.token}`
-        });
+    const requestBody: BuscarEntidadRequest = {
+      codigoEntidad: codigoEntidad
+    };
 
-        const requestBody: BuscarEntidadRequest = {
-          codigoEntidad: codigoEntidad
-        };
-
-        return this.http.post<Entidad>(url, requestBody, { headers });
-      }),
-      catchError(error => {
-        console.error('Error al obtener entidad:', error);
-        return throwError(() => error);
-      })
-    );
+    return this.http.post<Entidad>(url, requestBody, { headers })
+      .pipe(
+        catchError(error => {
+          return throwError(() => error);
+        })
+      );
   }
 
   /**
