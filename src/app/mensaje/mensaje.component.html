@@ -1,0 +1,17 @@
+<div class="contenedor-popup">
+  <ng-container *ngIf="!mostrandoLoader; else loaderTemplate">
+    <div class="fade-container" [ngClass]="{ 'fade-out': desvanecer }">
+      <h2>{{ data.titulo }}</h2>
+      <p>{{ data.descripcion }}</p>
+      <button mat-raised-button (click)="irPortal()">
+        {{ data.boton || 'ACEPTAR' }}
+      </button>
+    </div>
+  </ng-container>
+
+  <ng-template #loaderTemplate>
+    <div class="loader-container">
+      <div class="spinner"></div>
+    </div>
+  </ng-template>
+</div>
