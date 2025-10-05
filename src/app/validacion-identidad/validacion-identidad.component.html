@@ -1,24 +1,93 @@
-<mat-card class="card-gradient-header card-hover">
-  <mat-card-header>
-    <mat-card-title>Validación de Identidad</mat-card-title>
-    <mat-card-subtitle>Verificar datos del documento</mat-card-subtitle>
-  </mat-card-header>
+<form [formGroup]="beginForm">
+  <div class="container">
+    <div class="row">
+      <div class="col-6 left-panel">
+        <div class="contenedor-escudo">
+          <img src="images/ShieldInfycredit.png" alt="Validación Imagen" class="escudo" />
+          <div class="texto-escudo">Validación de Identidad</div>
+        </div>
+      </div>
+      <div class="col-6 right-panel">
+        <div class="container">
+          <div class="row">
+            <mat-form-field appearance="fill">
+              <mat-label>Seleccione tipo de identificación</mat-label>
+              <mat-select formControlName="tipoDocumento">
+                <mat-option *ngFor="let opcion of opciones" [value]="opcion">
+                  {{ opcion }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
 
-  <mat-card-content>
+            <mat-form-field appearance="outline">
+              <mat-label>Número de identificación</mat-label>
+              <input matInput type="text" (input)="soloNumeros($event, 'identificacion')"
+                formControlName="identificacion" maxlength="15" placeholder="Ingrese su número de identificación" />
+            </mat-form-field>
 
-      <p><strong class="text-secondary">Documento:</strong> <span class="text-primary">123456789</span></p>
-      <p><strong class="text-secondary">Nombre:</strong> <span class="text-primary">Usuario de prueba</span></p>
-      <p><strong class="text-secondary">Estado:</strong> <span class="text-accent">⏳ Validando...</span></p>
-      <p><strong class="text-secondary">Proceso:</strong> <span class="text-accent">{{ esActualizacion ? 'Actualización' : 'Nuevo' }}</span></p>
+            <mat-form-field appearance="outline">
+              <mat-label>Primer nombre</mat-label>
+              <input matInput formControlName="primerNombre" (input)="soloLetras($event, 'primerNombre')" maxlength="50"
+                required placeholder="Ingrese primer nombre" />
+            </mat-form-field>
 
-    <div class="loading-info">
-      <small>🔄 <em>Componente cargado dinámicamente cuando llegaste al paso 1</em></small>
+            <mat-form-field appearance="outline">
+              <mat-label>Primer Apellido</mat-label>
+              <input matInput formControlName="primerApellido" (input)="soloLetras($event, 'primerApellido')"
+                maxlength="50" required placeholder="Ingrese primer apellido" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Fecha de expedición</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="fechaExpedicion" [max]="hoy"
+                (input)="formatearFecha($event)" maxlength="10" placeholder="DD/MM/YYYY" required />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="beginForm.get('fechaExpedicion')?.hasError('required')">
+                La fecha de expedición es obligatoria.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Número de celular</mat-label>
+              <input matInput type="tel" formControlName="celular" (input)="soloNumeros($event, 'celular')"
+                minlength="10" maxlength="10" required placeholder="Ej: 3001234567" />
+              <mat-error *ngIf="beginForm.get('celular')?.hasError('required')">
+                El número de celular es obligatorio.
+              </mat-error>
+              <mat-error *ngIf="beginForm.get('celular')?.hasError('minlength')">
+                El número debe tener exactamente 10 dígitos.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Correo electrónico</mat-label>
+              <input matInput type="email" formControlName="correo" name="correo" required email
+                placeholder="ejemplo@correo.com" />
+              <mat-error *ngIf="beginForm.get('correo')?.hasError('minlength')">
+                El mail debe tener el formato correcto.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-slide-toggle formControlName="acceptTerminos" name="acceptTerminos"
+              style="text-align: left; margin-top:5px;">
+              <a>Acepto Términos y condiciones</a>
+            </mat-slide-toggle>
+            <mat-slide-toggle formControlName="acceptConsultas" name="acceptConsultas" style="text-align: left;"
+              required>
+              <a>
+                Autorizo Consulta de centrales de riesgo, operadores de seguridad social,
+                tratamiento de datos y firma electrónica.
+              </a>
+            </mat-slide-toggle>
+
+            <button mat-raised-button color="primary" type="submit" [disabled]="!beginForm.valid"
+              (click)="onContinuar()" style="margin-top:20px;">
+              CONTINUAR
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-  </mat-card-content>
-
-  <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="onContinuar()">
-      Continuar al siguiente paso
-    </button>
-  </mat-card-actions>
-</mat-card>
+  </div>
+</form>

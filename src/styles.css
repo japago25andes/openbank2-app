@@ -6,109 +6,182 @@
   --background: #F8F8FF;
   --borders: #D3D3E2;
   --espaciado-base: 16px;
+
+  /* Variables oficiales de Angular Material */
+  --mdc-theme-primary: var(--color-primario);
+  --mdc-theme-secondary: var(--color-secundario);
+  --mdc-theme-surface: var(--background);
+  --mdc-theme-on-surface: var(--color-primario);
+  --mdc-theme-on-primary: white;
+
+  /* Switch/Toggle variables */
+  --mdc-switch-selected-track-color: var(--color-primario);
+  --mdc-switch-selected-handle-color: var(--acento);
+  --mdc-switch-selected-icon-color: white;
+  --mdc-switch-unselected-track-color: rgba(124, 124, 124, 0.39);
+  --mdc-switch-unselected-handle-color: #fafafa;
+  --mdc-switch-selected-pressed-handle-color: var(--acento);
+  --mdc-switch-selected-focus-handle-color: var(--acento);
+  --mdc-switch-selected-hover-handle-color: var(--acento);
+  --mdc-switch-selected-pressed-track-color: var(--color-primario);
+  --mdc-switch-selected-focus-track-color: var(--color-primario);
+  --mdc-switch-selected-hover-track-color: var(--color-primario);
+
+  /* Ripple/Focus ring variables para evitar colores azules */
+  --mat-focus-indicator-color: var(--color-primario);
+  --mat-slide-toggle-ripple-color: var(--color-primario);
+  --mdc-ripple-color: var(--color-primario);
+
+  /* Form field variables */
+  --mdc-filled-text-field-focus-active-indicator-color: var(--color-primario);
+  --mdc-filled-text-field-focus-label-text-color: var(--color-primario);
+  --mdc-outlined-text-field-focus-outline-color: var(--color-primario);
+  --mdc-outlined-text-field-focus-label-text-color: var(--color-primario);
+
+  /* Button variables */
+  --mdc-filled-button-container-color: var(--color-primario);
+  --mdc-filled-button-label-text-color: white;
+  --mdc-filled-button-disabled-container-color: #CCCCCC;
+  --mdc-filled-button-disabled-label-text-color: #999999;
+
+  /* Checkbox variables */
+  --mdc-checkbox-selected-checkmark-color: white;
+  --mdc-checkbox-selected-focus-icon-color: var(--color-primario);
+  --mdc-checkbox-selected-hover-icon-color: var(--color-primario);
+  --mdc-checkbox-selected-icon-color: var(--color-primario);
+  --mdc-checkbox-selected-pressed-icon-color: var(--color-primario);
+
+  /* Radio variables */
+  --mdc-radio-selected-focus-icon-color: var(--color-primario);
+  --mdc-radio-selected-hover-icon-color: var(--color-primario);
+  --mdc-radio-selected-icon-color: var(--color-primario);
+  --mdc-radio-selected-pressed-icon-color: var(--color-primario);
+
+  /* Toolbar variables */
+  --mdc-top-app-bar-container-color: var(--color-primario);
+  --mat-toolbar-container-background-color: var(--color-primario);
+  --mat-toolbar-container-text-color: white;
+
+  /* Elevated button (mat-raised-button) variables */
+  --mdc-elevated-button-container-color: var(--color-primario);
+  --mdc-elevated-button-label-text-color: white;
+  --mdc-elevated-button-disabled-container-color: #CCCCCC;
+  --mdc-elevated-button-disabled-label-text-color: #999999;
+  --mdc-protected-button-container-color: var(--color-primario);
+  --mdc-protected-button-label-text-color: white;
+  --mdc-protected-button-disabled-container-color: #CCCCCC;
+  --mdc-protected-button-disabled-label-text-color: #999999;
+
+  /* Text button variables */
+  --mdc-text-button-label-text-color: var(--color-primario);
+  --mdc-outlined-button-label-text-color: var(--color-primario);
+  --mdc-outlined-button-outline-color: var(--color-primario);
+
+  /* FAB variables */
+  --mdc-fab-container-color: var(--color-primario);
+  --mdc-fab-label-text-color: white;
+  --mdc-fab-icon-color: white;
+
+  /* Select variables */
+  --mdc-filled-text-field-caret-color: var(--color-primario);
+  --mdc-outlined-text-field-caret-color: var(--color-primario);
+  --mdc-outlined-select-text-field-focus-outline-color: var(--color-primario);
+  --mdc-filled-select-text-field-focus-active-indicator-color: var(--color-primario);
+
+  /* Date picker variables */
+  --mat-datepicker-calendar-date-selected-state-background-color: var(--color-primario);
+  --mat-datepicker-calendar-date-today-outline-color: var(--color-primario);
+  --mat-datepicker-toggle-icon-color: var(--color-primario);
+
+  /* Progress indicators */
+  --mdc-linear-progress-active-indicator-color: var(--color-primario);
+  --mdc-circular-progress-active-indicator-color: var(--color-primario);
+
+  /* Slider variables */
+  --mdc-slider-active-track-color: var(--color-primario);
+  --mdc-slider-handle-color: var(--color-primario);
+
+  /* Tab variables */
+  --mat-tab-header-active-label-text-color: var(--color-primario);
+  --mat-tab-header-active-ripple-color: var(--color-primario);
+  --mdc-tab-indicator-active-indicator-color: var(--color-primario);
+
+  /* Snackbar variables */
+  --mdc-snackbar-container-color: var(--color-primario);
+  --mdc-snackbar-supporting-text-color: white;
+
+  /* Dialog variables */
+  --mdc-dialog-container-color: var(--background);
+  --mat-dialog-headline-color: var(--color-primario);
 }
 
-html, body { height: 100%; }
-
-body {
+html, body {
+  height: 100%;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   background-color: var(--background);
   color: var(--color-primario);
 }
 
-/* Sobreescribir estilos de Angular Material con colores personalizados */
+/* Overrides específicos necesarios */
+.mat-mdc-card {
+  border: 1px solid var(--borders) !important;
+}
 
-/* Toolbar / Header */
+.mat-mdc-form-field .mat-mdc-text-field-wrapper {
+  background-color: white !important;
+}
+
+.mat-mdc-form-field .mat-mdc-form-field-error {
+  color: #f44336 !important;
+}
+
+/* Forzar colores en componentes que no usan variables */
 .mat-toolbar, .mat-mdc-toolbar {
   background-color: var(--color-primario) !important;
   color: white !important;
 }
 
-/* Botones primarios */
-.mat-mdc-raised-button.mat-primary,
-.mat-mdc-fab.mat-primary,
-.mat-mdc-mini-fab.mat-primary {
+.mat-mdc-raised-button.mat-primary {
   background-color: var(--color-primario) !important;
   color: white !important;
 }
 
-/* Botones de acento */
-.mat-mdc-raised-button.mat-accent,
-.mat-mdc-fab.mat-accent,
-.mat-mdc-mini-fab.mat-accent {
+.mat-mdc-raised-button.mat-accent {
   background-color: var(--acento) !important;
-  color: #000 !important;
+  color: black !important;
 }
 
-/* Botones normales */
-.mat-mdc-button, .mat-mdc-outlined-button {
+/* Estilos para botones deshabilitados */
+.mat-mdc-raised-button:disabled,
+.mat-mdc-raised-button.mat-mdc-button-disabled {
+  background-color: #CCCCCC !important;
+  color: #999999 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  opacity: 0.6 !important;
+}
+
+.mat-mdc-button:disabled,
+.mat-mdc-button.mat-mdc-button-disabled {
+  background-color: #CCCCCC !important;
+  color: #999999 !important;
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+}
+
+.mat-mdc-outlined-button:disabled,
+.mat-mdc-outlined-button.mat-mdc-button-disabled {
+  border-color: #CCCCCC !important;
+  color: #999999 !important;
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+}
+
+a {
   color: var(--color-primario) !important;
 }
 
-/* Cards */
-.mat-mdc-card {
-  background-color: white !important;
-  border: 1px solid var(--borders) !important;
-}
-
-/* Input fields */
-.mat-mdc-form-field .mat-mdc-text-field-wrapper {
-  background-color: white !important;
-}
-
-.mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
-  color: var(--color-primario) !important;
-}
-
-/* Checkbox y radio buttons */
-.mat-mdc-checkbox.mat-mdc-checkbox-checked .mdc-checkbox__native-control:enabled ~ .mdc-checkbox__background {
-  background-color: var(--color-primario) !important;
-  border-color: var(--color-primario) !important;
-}
-
-.mat-mdc-radio-button.mat-mdc-radio-checked .mdc-radio__outer-circle {
-  border-color: var(--color-primario) !important;
-}
-
-.mat-mdc-radio-button.mat-mdc-radio-checked .mdc-radio__inner-circle {
-  background-color: var(--color-primario) !important;
-}
-
-/* Progress bar y spinner */
-.mat-mdc-progress-bar .mdc-linear-progress__bar-inner {
-  background-color: var(--color-primario) !important;
-}
-
-.mat-mdc-progress-spinner circle {
-  stroke: var(--color-primario) !important;
-}
-
-/* Tabs */
-.mat-mdc-tab-group.mat-primary .mat-mdc-tab .mdc-tab__text-label {
-  color: var(--color-primario) !important;
-}
-
-.mat-mdc-tab-group.mat-primary .mdc-tab-indicator__content--underline {
-  background-color: var(--color-primario) !important;
-}
-
-/* Slider */
-.mat-mdc-slider .mdc-slider__track--active_fill {
-  background-color: var(--color-primario) !important;
-}
-
-.mat-mdc-slider .mdc-slider__thumb-knob {
-  background-color: var(--color-primario) !important;
-}
-
-/* Menu y dropdown */
-.mat-mdc-menu-panel {
-  background-color: white !important;
-}
-
-/* Snackbar */
-.mat-mdc-snack-bar-container {
-  background-color: var(--color-primario) !important;
-  color: white !important;
+a:hover {
+  color: var(--color-secundario) !important;
 }
