@@ -37,6 +37,7 @@ export class InicioComponent implements OnInit {
   public cliente: string = '';
   public requestEntidad: string = '';
   public currentStepIndex: number = 0;
+  public esActualizacion: boolean = false;
 
   public token: Autentica = {
     token: '',
@@ -65,6 +66,8 @@ export class InicioComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.requestEntidad = params['Entidad'];
+      const processParam = params['Process']?.toLowerCase();
+      this.esActualizacion = processParam === 'update';
 
       if (this.requestEntidad) {
         // Primero hacer login para obtener el token

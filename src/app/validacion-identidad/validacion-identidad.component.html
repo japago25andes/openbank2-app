@@ -5,18 +5,11 @@
   </mat-card-header>
 
   <mat-card-content>
-    <div *ngIf="entidad.razon_social; else noData">
-      <p><strong class="text-secondary">Cliente:</strong> <span class="text-primary">{{ entidad.razon_social }}</span></p>
-      <p><strong class="text-secondary">NIT:</strong> <span class="text-primary">{{ entidad.nit }}</span></p>
-      <p><strong class="text-secondary">Código Entidad:</strong> <span class="text-primary">{{ entidad.cod_entidad }}</span></p>
-      <p><strong class="text-secondary">Estado:</strong> <span class="text-accent">✅ Datos validados</span></p>
-    </div>
 
-    <ng-template #noData>
       <p><strong class="text-secondary">Documento:</strong> <span class="text-primary">123456789</span></p>
       <p><strong class="text-secondary">Nombre:</strong> <span class="text-primary">Usuario de prueba</span></p>
       <p><strong class="text-secondary">Estado:</strong> <span class="text-accent">⏳ Validando...</span></p>
-    </ng-template>
+      <p><strong class="text-secondary">Proceso:</strong> <span class="text-accent">{{ esActualizacion ? 'Actualización' : 'Nuevo' }}</span></p>
 
     <div class="loading-info">
       <small>🔄 <em>Componente cargado dinámicamente cuando llegaste al paso 1</em></small>

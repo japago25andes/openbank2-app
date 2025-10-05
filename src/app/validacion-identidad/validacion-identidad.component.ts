@@ -15,14 +15,14 @@ import { MatButtonModule } from '@angular/material/button';
   ]
 })
 export class ValidacionIdentidadComponent implements OnInit {
-  @Input() entidad: any = {};
+  @Input() esActualizacion: boolean = false;
   @Output() continuar = new EventEmitter<void>();
 
   constructor() { }
 
   ngOnInit() {
     console.log('🚀 ValidacionIdentidadComponent cargado - Solo cuando llega al paso 1');
-    console.log('Entidad recibida:', this.entidad);
+    console.log('Es actualización:', this.esActualizacion);
   }
 
   onContinuar() {

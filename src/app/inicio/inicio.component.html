@@ -13,13 +13,14 @@
     </div>
   </div>
 
+  <!-- Stepper responsivo -->
   <mat-stepper [linear]="true" #stepper [selectedIndex]="currentStepIndex" [disableRipple]="true"
-    style="background-color: var(--background);" class="responsive-stepper" [class.mobile-hidden]="true">
+    style="background-color: var(--background);" class="responsive-stepper">
 
     <mat-step [editable]="false">
       <ng-template matStepLabel>Validación Identidad</ng-template>
       <!-- COMPONENTE REAL: Solo se carga cuando currentStepIndex === 0 -->
-      <app-validacion-identidad *ngIf="currentStepIndex === 0" [entidad]="entidad"
+      <app-validacion-identidad *ngIf="currentStepIndex === 0" [esActualizacion]="esActualizacion"
         (continuar)="onValidacionIdentidadContinuar()">
       </app-validacion-identidad>
     </mat-step>
