@@ -70,15 +70,15 @@
             </mat-form-field>
 
             <mat-slide-toggle formControlName="acceptTerminos" name="acceptTerminos"
-              style="text-align: left; margin-top:5px;">
-              <a>Acepto Términos y condiciones</a>
+              style="text-align: left; margin: 0px;">
+              <a href="/terminos-condiciones" target="_blank">Acepto términos y condiciones</a>
             </mat-slide-toggle>
-            <mat-slide-toggle formControlName="acceptConsultas" name="acceptConsultas" style="text-align: left;"
-              required>
-              <a>
-                Autorizo Consulta de centrales de riesgo, operadores de seguridad social,
-                tratamiento de datos y firma electrónica.
-              </a>
+            <mat-slide-toggle formControlName="acceptConsultas" name="acceptConsultas"
+              style="text-align: left; margin: 0px;" required>
+              <a href="/politica-consultas" target="_blank">Consulta de centrales de riesgo</a>, operadores de seguridad
+              social,
+              <a href="/politica-datos" target="_blank">tratamiento de datos</a> y <a href="/politica-firma"
+                target="_blank">firma electrónica</a>.
             </mat-slide-toggle>
 
             <button mat-raised-button color="primary" type="submit" [disabled]="!beginForm.valid"

@@ -129,10 +129,6 @@ export class ValidacionIdentidadComponent implements OnInit {
     event.target.value = valor;
   }
 
-
-
-
-
   onContinuar() {
     if (this.beginForm.valid) {
       // Guardar datos en el servicio
