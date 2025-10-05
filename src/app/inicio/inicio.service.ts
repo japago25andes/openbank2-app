@@ -66,7 +66,7 @@ export class InicioService {
    */
   aplicarColores(colores: any[]): void {
     colores.forEach(color => {
-      document.documentElement.style.setProperty(color.llave, color.valor);
+      document.documentElement.style.setProperty(`${color.llave}`, color.valor);
     });
   }
 }

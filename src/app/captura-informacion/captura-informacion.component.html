@@ -1,3 +1,65 @@
-<p>
-  captura-informacion works!
-</p>
+<mat-card class="card-gradient-header card-hover">
+  <mat-card-header>
+    <mat-card-title>{{ tituloProceso }}</mat-card-title>
+    <mat-card-subtitle>Cargar documentos requeridos</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="documentos-container">
+
+      <div class="documento-item">
+        <mat-icon class="text-primary">description</mat-icon>
+        <div class="documento-info">
+          <strong class="text-secondary">Copia de cédula</strong>
+          <input type="file"
+                 (change)="onFileSelected($event, 'cedula')"
+                 accept=".pdf,.jpg,.png"
+                 class="file-input">
+        </div>
+      </div>
+
+      <div class="documento-item">
+        <mat-icon class="text-primary">attach_money</mat-icon>
+        <div class="documento-info">
+          <strong class="text-secondary">Comprobante de ingresos</strong>
+          <input type="file"
+                 (change)="onFileSelected($event, 'ingresos')"
+                 accept=".pdf,.jpg,.png"
+                 class="file-input">
+        </div>
+      </div>
+
+      <div class="documento-item">
+        <mat-icon class="text-primary">contacts</mat-icon>
+        <div class="documento-info">
+          <strong class="text-secondary">Referencias comerciales</strong>
+          <input type="file"
+                 (change)="onFileSelected($event, 'referencias')"
+                 accept=".pdf,.jpg,.png"
+                 class="file-input">
+        </div>
+      </div>
+
+    </div>
+
+    <div *ngIf="archivosSubidos.length > 0" class="archivos-subidos">
+      <h4 class="text-secondary">Archivos cargados:</h4>
+      <div *ngFor="let archivo of archivosSubidos" class="archivo-item">
+        <mat-icon class="text-accent">check_circle</mat-icon>
+        <span class="text-primary">{{ archivo.nombre }} ({{ archivo.tipo }})</span>
+      </div>
+    </div>
+
+    <div class="loading-info">
+      <small>🔄 <em>Componente cargado dinámicamente cuando llegaste al paso 4</em></small>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button color="primary"
+            [disabled]="archivosSubidos.length === 0"
+            (click)="onContinuar()">
+      Continuar con documentos
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -1,45 +1,60 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" class="justify-content-center">
   <span>{{ cliente || 'OpenBank2' }}</span>
 </mat-toolbar>
 
-<div class="p-3">
-  <div class="grid">
-    <div class="col-12 md:col-6">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Bienvenido</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p *ngIf="!cliente">Este es tu primer componente con Angular Material y PrimeFlex 🚀</p>
-          <div *ngIf="cliente">
-            <p><strong>Cliente:</strong> {{ entidad.razon_social }}</p>
-            <p><strong>NIT:</strong> {{ entidad.nit }}</p>
-            <p><strong>Código Entidad:</strong> {{ entidad.cod_entidad }}</p>
-            <p><strong>Nombre Comercial:</strong> {{ entidad.nombre_comercial }}</p>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
+<!-- Proceso de crédito cuando YA hay cliente -->
+<div class="container" *ngIf="cliente">
 
-    <div class="col-12 md:col-6">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Información de Colores</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div *ngIf="entidad.colores.length > 0; else noColores">
-            <p><strong>Colores aplicados:</strong></p>
-            <ul>
-              <li *ngFor="let color of entidad.colores">
-                <strong>{{ color.llave }}:</strong> {{ color.valor }}
-              </li>
-            </ul>
-          </div>
-          <ng-template #noColores>
-            <button mat-raised-button color="accent" (click)="testUrl()">Probar con ?Entidad=11001</button>
-          </ng-template>
-        </mat-card-content>
-      </mat-card>
+  <!-- Indicador de progreso móvil -->
+  <div class="mobile-progress-indicator">
+    <span>Paso {{currentStepIndex + 1}} de 5</span>
+    <div class="progress-bar-custom">
+      <div class="progress-fill-custom" [style.width.%]="((currentStepIndex + 1) / 5) * 100"></div>
     </div>
   </div>
+
+  <mat-stepper [linear]="true" #stepper [selectedIndex]="currentStepIndex" [disableRipple]="true"
+    style="background-color: var(--background);" class="responsive-stepper" [class.mobile-hidden]="true">
+
+    <mat-step [editable]="false">
+      <ng-template matStepLabel>Validación Identidad</ng-template>
+      <!-- COMPONENTE REAL: Solo se carga cuando currentStepIndex === 0 -->
+      <app-validacion-identidad *ngIf="currentStepIndex === 0" [entidad]="entidad"
+        (continuar)="onValidacionIdentidadContinuar()">
+      </app-validacion-identidad>
+    </mat-step>
+
+    <mat-step [editable]="false">
+      <ng-template matStepLabel>Validación canales</ng-template>
+      <!-- COMPONENTE REAL: Solo se carga cuando currentStepIndex === 1 -->
+      <app-validacion-otp *ngIf="currentStepIndex === 1" (continuar)="onValidacionOtpContinuar()"
+        (error)="onValidacionOtpError($event)">
+      </app-validacion-otp>
+    </mat-step>
+
+    <mat-step [editable]="false">
+      <ng-template matStepLabel>Cuestionario</ng-template>
+      <!-- COMPONENTE REAL: Solo se carga cuando currentStepIndex === 2 -->
+      <app-preguntas *ngIf="currentStepIndex === 2" (continuar)="onPreguntasContinuar($event)">
+      </app-preguntas>
+    </mat-step>
+
+    <mat-step [editable]="false">
+      <ng-template matStepLabel>{{tituloProceso()}}</ng-template>
+      <!-- COMPONENTE REAL: Solo se carga cuando currentStepIndex === 3 -->
+      <app-captura-informacion *ngIf="currentStepIndex === 3" [tituloProceso]="tituloProceso()"
+        (continuar)="onCapturaInformacionContinuar($event)">
+      </app-captura-informacion>
+    </mat-step>
+
+    <mat-step [editable]="false">
+      <ng-template matStepLabel>Firma</ng-template>
+      <!-- COMPONENTE REAL: Solo se carga cuando currentStepIndex === 4 -->
+      <app-firma *ngIf="currentStepIndex === 4" [datosCliente]="entidad"
+        (procesarFinalizado)="onFirmaProcesoFinalizado($event)">
+      </app-firma>
+    </mat-step>
+
+  </mat-stepper>
+
 </div>

@@ -1,3 +1,47 @@
-<p>
-  preguntas works!
-</p>
+<mat-card class="card-gradient-header card-hover">
+  <mat-card-header>
+    <mat-card-title>Cuestionario</mat-card-title>
+    <mat-card-subtitle>Preguntas de validación crediticia</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="cuestionarioForm" (ngSubmit)="onContinuar()">
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Ingreso mensual (COP)</mat-label>
+        <input matInput type="number" formControlName="ingresoMensual" placeholder="Ej: 2500000">
+        <mat-error *ngIf="cuestionarioForm.get('ingresoMensual')?.hasError('required')">
+          El ingreso mensual es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <div class="form-group">
+        <label class="text-secondary"><strong>¿Tiene otros créditos activos?</strong></label>
+        <mat-radio-group formControlName="tieneOtrosCreditos">
+          <mat-radio-button value="si">Sí</mat-radio-button>
+          <mat-radio-button value="no">No</mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Monto solicitado (COP)</mat-label>
+        <input matInput type="number" formControlName="montoSolicitado" placeholder="Ej: 5000000">
+        <mat-error *ngIf="cuestionarioForm.get('montoSolicitado')?.hasError('required')">
+          El monto solicitado es requerido
+        </mat-error>
+      </mat-form-field>
+
+    </form>
+
+    <div class="loading-info">
+      <small>🔄 <em>Componente cargado dinámicamente cuando llegaste al paso 3</em></small>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button color="primary"
+            (click)="onContinuar()">
+      Enviar cuestionario
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -1,3 +1,70 @@
-<p>
-  firma works!
-</p>
+<mat-card class="card-gradient-header card-hover">
+  <mat-card-header>
+    <mat-card-title>Firma Digital</mat-card-title>
+    <mat-card-subtitle>Finalización del proceso crediticio</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div *ngIf="!procesoCompletado">
+
+      <div class="resumen-contrato">
+        <h4 class="text-secondary">Resumen del Contrato</h4>
+        <p><strong class="text-secondary">Cliente:</strong> <span class="text-primary">{{ datosCliente.razon_social || 'Usuario' }}</span></p>
+        <p><strong class="text-secondary">NIT:</strong> <span class="text-primary">{{ datosCliente.nit || 'N/A' }}</span></p>
+        <p><strong class="text-secondary">Tipo:</strong> <span class="text-accent">Crédito Personal</span></p>
+        <p><strong class="text-secondary">Estado:</strong> <span class="text-accent">Listo para firma</span></p>
+      </div>
+
+      <form [formGroup]="firmaForm" class="firma-form">
+
+        <div class="checkbox-group">
+          <mat-checkbox formControlName="aceptaTerminos">
+            Acepto los términos y condiciones del contrato
+          </mat-checkbox>
+        </div>
+
+        <div class="checkbox-group">
+          <mat-checkbox formControlName="aceptaAutorizacion">
+            Autorizo el tratamiento de mis datos personales
+          </mat-checkbox>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Firma digital (Escriba su nombre completo)</mat-label>
+          <input matInput formControlName="firmaDigital" placeholder="Su nombre completo">
+          <mat-error *ngIf="firmaForm.get('firmaDigital')?.hasError('required')">
+            La firma digital es requerida
+          </mat-error>
+        </mat-form-field>
+
+      </form>
+    </div>
+
+    <div *ngIf="procesoCompletado" class="proceso-exitoso">
+      <div class="success-icon">
+        <mat-icon class="text-accent large-icon">check_circle</mat-icon>
+      </div>
+      <h3 class="text-primary">¡Proceso Completado Exitosamente!</h3>
+      <p class="text-secondary">Su solicitud de crédito ha sido procesada correctamente.</p>
+    </div>
+
+    <div class="loading-info">
+      <small>🔄 <em>Componente cargado dinámicamente cuando llegaste al paso 5</em></small>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button color="primary"
+            [disabled]="!firmaForm.valid || procesoCompletado"
+            (click)="onFirmar()"
+            *ngIf="!procesoCompletado">
+      Firmar Contrato
+    </button>
+
+    <button mat-raised-button color="accent"
+            *ngIf="procesoCompletado"
+            (click)="procesarFinalizado.emit()">
+      Finalizar
+    </button>
+  </mat-card-actions>
+</mat-card>

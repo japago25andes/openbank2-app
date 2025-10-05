@@ -1,0 +1,180 @@
+/* ==========================================
+   ESTILOS ESPECÍFICOS DEL COMPONENTE INICIO
+   ========================================== */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--background);
+}
+
+/* Pantalla inicial simplificada */
+.pantalla-inicial {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  padding: 20px;
+}
+
+.welcome-card {
+  max-width: 500px;
+  text-align: center;
+}
+
+.welcome-card h2 {
+  color: var(--color-primario);
+  margin-bottom: 16px;
+}
+
+.welcome-card code {
+  background-color: var(--background);
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: var(--color-secundario);
+}
+
+/* Info del cliente */
+.cliente-info {
+  margin-bottom: 20px;
+}
+
+.cliente-datos {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.cliente-datos p {
+  margin: 4px 0;
+  color: white;
+}
+
+.cliente-datos strong {
+  color: var(--acento);
+}
+
+/* Información de colores simplificada */
+.colores-info {
+  margin-top: 20px;
+}
+
+.colores-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.colores-info li {
+  padding: 8px 12px;
+  margin: 4px 0;
+  background-color: var(--background);
+  border-radius: 4px;
+  border-left: 3px solid var(--acento);
+}
+
+/* Indicador de progreso móvil - usando clases globales */
+.mobile-progress-indicator {
+  display: none;
+  background: white;
+  padding: 16px;
+  border-bottom: 1px solid var(--borders);
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.mobile-progress-indicator span {
+  font-weight: 500;
+  color: var(--color-primario);
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+/* Stepper responsivo - usando clases globales reutilizables */
+.responsive-stepper {
+  background: transparent !important;
+}
+
+.responsive-stepper mat-step {
+  margin-bottom: 20px;
+}
+
+.responsive-stepper mat-card {
+  margin: 16px auto;
+  max-width: 700px;
+}
+
+.responsive-stepper mat-card-content p {
+  margin: 8px 0;
+}
+
+.responsive-stepper mat-card-actions {
+  padding: 16px 24px;
+  justify-content: flex-end;
+  background-color: var(--background);
+  border-top: 1px solid var(--borders);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .mobile-progress-indicator {
+    display: block;
+  }
+
+  .mobile-hidden {
+    display: none !important;
+  }
+
+  .responsive-stepper mat-card {
+    margin: 8px 0;
+  }
+}
+
+/* Estilos para el stepper horizontal en desktop */
+@media (min-width: 769px) {
+  .responsive-stepper {
+    padding: 24px;
+  }
+
+  .responsive-stepper .mat-stepper-horizontal {
+    margin-top: 20px;
+  }
+}
+
+/* Personalización del stepper header */
+.responsive-stepper ::ng-deep .mat-step-header .mat-step-icon {
+  background-color: var(--color-primario) !important;
+  color: white !important;
+}
+
+.responsive-stepper ::ng-deep .mat-step-header .mat-step-icon-selected {
+  background-color: var(--color-secundario) !important;
+}
+
+.responsive-stepper ::ng-deep .mat-step-header .mat-step-label {
+  color: var(--color-primario) !important;
+}
+
+.responsive-stepper ::ng-deep .mat-step-header .mat-step-label.mat-step-label-active {
+  color: var(--color-secundario) !important;
+  font-weight: 500;
+}
+
+.responsive-stepper ::ng-deep .mat-stepper-horizontal-line {
+  border-top-color: var(--borders) !important;
+}
+
+/* Animaciones suaves */
+.responsive-stepper ::ng-deep .mat-step-header {
+  transition: all 0.3s ease;
+}
+
+.responsive-stepper ::ng-deep .mat-step-header:hover {
+  background-color: var(--background);
+}

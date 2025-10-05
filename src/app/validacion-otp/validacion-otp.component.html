@@ -1,3 +1,22 @@
-<p>
-  validacion-otp works!
-</p>
+<mat-card class="card-gradient-header card-hover">
+  <mat-card-header>
+    <mat-card-title>Validación de Canales</mat-card-title>
+    <mat-card-subtitle>Verificar código OTP</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <p><strong class="text-secondary">SMS enviado a:</strong> <span class="text-primary">***-***-4567</span></p>
+    <p><strong class="text-secondary">Email enviado a:</strong> <span class="text-primary">j***&#64;email.com</span></p>
+    <p><strong class="text-secondary">Código OTP:</strong> <span class="text-accent">[123456]</span></p>
+
+    <div class="loading-info">
+      <small>🔄 <em>Componente cargado dinámicamente cuando llegaste al paso 2</em></small>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="onContinuar()">
+      Validar y continuar
+    </button>
+  </mat-card-actions>
+</mat-card>

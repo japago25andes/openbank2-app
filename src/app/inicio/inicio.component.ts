@@ -5,9 +5,15 @@ import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatStepperModule } from '@angular/material/stepper';
 
 import { InicioService } from './inicio.service';
 import { Autentica, Entidad } from './inicio.interface';
+import { ValidacionIdentidadComponent } from '../validacion-identidad/validacion-identidad.component';
+import { ValidacionOtpComponent } from '../validacion-otp/validacion-otp.component';
+import { PreguntasComponent } from '../preguntas/preguntas.component';
+import { CapturaInformacionComponent } from '../captura-informacion/captura-informacion.component';
+import { FirmaComponent } from '../firma/firma.component';
 
 @Component({
   selector: 'app-inicio',
@@ -18,12 +24,20 @@ import { Autentica, Entidad } from './inicio.interface';
     CommonModule,
     MatToolbarModule,
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
+    MatStepperModule,
+    ValidacionIdentidadComponent,
+    ValidacionOtpComponent,
+    PreguntasComponent,
+    CapturaInformacionComponent,
+    FirmaComponent
   ]
 })
 export class InicioComponent implements OnInit {
   public cliente: string = '';
   public requestEntidad: string = '';
+  public currentStepIndex: number = 0;
+
   public token: Autentica = {
     token: '',
     resultado: false,
@@ -86,8 +100,39 @@ export class InicioComponent implements OnInit {
     });
   }
 
-  testUrl() {
-    // Redirigir con el parámetro de prueba
-    this.router.navigate(['/'], { queryParams: { Entidad: '11001' } });
+  // Métodos del stepper (MOCK)
+  onValidacionIdentidadContinuar() {
+    this.currentStepIndex = 1;
+    console.log('Avanzar a Validación de Canales');
+  }
+
+  onValidacionOtpContinuar() {
+    this.currentStepIndex = 2;
+    console.log('Avanzar a Cuestionario');
+  }
+
+  onValidacionOtpError(error: any) {
+    console.log('Error en validación OTP:', error);
+  }
+
+  onPreguntasContinuar(datosFormulario?: any) {
+    console.log('Datos del cuestionario recibidos:', datosFormulario);
+    this.currentStepIndex = 3;
+    console.log('Avanzar a Captura de Información');
+  }
+
+  onCapturaInformacionContinuar(datosCaptura?: any) {
+    console.log('Datos de captura recibidos:', datosCaptura);
+    this.currentStepIndex = 4;
+    console.log('Avanzar a Firma');
+  }
+
+  onFirmaProcesoFinalizado(datosFirma?: any) {
+    console.log('Proceso finalizado con datos:', datosFirma);
+    alert('¡Proceso de crédito completado exitosamente!');
+  }
+
+  tituloProceso(): string {
+    return 'Captura Información';
   }
 }
