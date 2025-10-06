@@ -36,11 +36,6 @@
   margin-bottom: var(--espaciado-base);
 }
 
-.texto-escudo {
-  font-size: 24px;
-  font-weight: bold;
-}
-
 /* Panel derecho con formulario */
 .right-panel {
   background: var(--background);
