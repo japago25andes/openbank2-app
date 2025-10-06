@@ -1,13 +1,238 @@
-.loading-info {
-  margin-top: 16px;
-  padding: 8px 12px;
-  background-color: var(--background);
-  border-radius: 4px;
-  border-left: 3px solid var(--acento);
-  font-style: italic;
-  color: var(--color-primario);
+/* TARJETA PRINCIPAL */
+.otp-card {
+  max-width: 480px;
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
 }
 
-mat-card-content p {
+/* HEADER */
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.security-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  color: white;
+}
+
+/* CONTENIDO */
+.otp-content {
+  padding: 24px;
+  text-align: center;
+}
+
+/* INFORMACIÓN DE ENVÍO */
+.send-info {
+  background: var(--background);
+  border: 1px solid var(--color-primario);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.send-info p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin: 8px 0;
+  color: var(--color-primario);
+  font-size: 0.9rem;
+}
+
+.send-info mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: var(--color-secundario);
+}
+
+/* CONTENEDOR VISUAL Y INPUT OCULTO */
+.otp-visual-container {
+  position: relative;
+  cursor: text;
+  margin: 32px 0;
+}
+
+.otp-visual-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  pointer-events: none; /* Para que el clic llegue al contenedor */
+}
+
+.hidden-otp-input {
+  position: absolute;
+  top: 0;
+  left: -9999px; /* Moverlo fuera de la pantalla */
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  border: none;
+  background: transparent;
+  color: transparent;
+}
+
+/* DÍGITOS VISUALES */
+.otp-digit {
+  width: 56px;
+  height: 64px;
+  border: 2px solid var(--color-primario);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-primario);
+  background: var(--background);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.otp-digit.filled {
+  border-color: var(--color-secundario);
+  color: var(--color-secundario);
+  transform: scale(1.05);
+  animation: popIn 0.3s ease-out;
+}
+
+/* Estilo para el cursor en la casilla activa */
+.otp-digit.cursor::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 60%;
+  background-color: var(--acento);
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1.05); opacity: 1; }
+}
+
+/* Cuando el input oculto tiene focus, animar el primer dígito vacío */
+.hidden-otp-input:focus + .otp-visual-inputs .otp-digit:not(.filled):first-of-type {
+  border-color: var(--acento);
+  box-shadow:
+    0 0 0 3px rgba(234, 115, 45, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* TEXTO INFORMATIVO */
+.info-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--color-primario);
+  font-size: 0.85rem;
+  margin-top: 16px;
+  opacity: 0.8;
+}
+
+.info-text mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* ESTADO DE VALIDACIÓN */
+.validation-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--color-primario);
+  font-weight: 500;
+  margin: 20px 0;
+  padding: 12px;
+  background: rgba(109, 167, 50, 0.1);
+  border-radius: 8px;
+}
+
+.spin {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ACCIONES */
+.otp-actions {
+  display: flex;
+  gap: 16px;
+  padding: 16px 24px 24px;
+}
+
+.otp-actions button {
+  flex: 1;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+/* RESPONSIVE */
+@media (max-width: 520px) {
+  .otp-card {
+    margin: 12px;
+  }
+
+  .otp-content {
+    padding: 20px 16px;
+  }
+
+  .otp-inputs-container {
+    gap: 8px;
+    padding: 0 8px;
+  }
+
+  .otp-input {
+    width: 44px;
+    height: 44px;
+    font-size: 1.4rem;
+  }
+
+  .otp-actions {
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .send-info {
+    padding: 12px;
+    margin-bottom: 24px;
+  }
+}
+
+@media (max-width: 380px) {
+  .otp-inputs-container {
+    gap: 6px;
+  }
+
+  .otp-input {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
 }

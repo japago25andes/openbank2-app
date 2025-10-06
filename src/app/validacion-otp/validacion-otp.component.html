@@ -1,22 +1,51 @@
-<mat-card class="card-gradient-header card-hover">
-  <mat-card-header>
-    <mat-card-title>Validación de Canales</mat-card-title>
-    <mat-card-subtitle>Verificar código OTP</mat-card-subtitle>
+<mat-card class="otp-card card-gradient-header card-hover mt-4">
+  <mat-card-header class="flex justify-content-center">
+    <div>
+      <mat-card-title class="font-medium text-2xl">Código de Verificación</mat-card-title>
+      <mat-card-subtitle class="text-center">Ingresa el código de 6 dígitos</mat-card-subtitle>
+    </div>
   </mat-card-header>
 
-  <mat-card-content>
-    <p><strong class="text-secondary">SMS enviado a:</strong> <span class="text-primary">***-***-4567</span></p>
-    <p><strong class="text-secondary">Email enviado a:</strong> <span class="text-primary">j***&#64;email.com</span></p>
-    <p><strong class="text-secondary">Código OTP:</strong> <span class="text-accent">[123456]</span></p>
-
-    <div class="loading-info">
-      <small>🔄 <em>Componente cargado dinámicamente cuando llegaste al paso 2</em></small>
+  <mat-card-content class="otp-content">
+    <!-- Información de envío -->
+    <div class="send-info">
+      <p><mat-icon>sms</mat-icon> <strong>SMS:</strong> ***-***-4567</p>
     </div>
+
+    <!-- 6 Inputs OTP Individuales -->
+    <!-- Contenedor visual que al hacer clic enfoca el input oculto -->
+    <div class="otp-visual-container" (click)="focusInput()">
+      <!-- Input real, pero oculto. Gestiona toda la lógica. -->
+      <input #hiddenInput type="tel" class="hidden-otp-input" maxlength="6" [ngModel]="otpCode"
+        (ngModelChange)="onCodeChanged($event)" pattern="\d*" inputmode="numeric" autocomplete="one-time-code" />
+
+      <!-- Contenedor para los dígitos visuales -->
+      <div class="otp-visual-inputs">
+        <div *ngFor="let digit of displayDigits; let i = index" class="otp-digit" [class.filled]="digit"
+          [class.cursor]="i === otpCode.length && hiddenInput.matches(':focus')">
+          {{ digit }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Estado de validación -->
+    <div class="validation-status" *ngIf="isValidating">
+      <mat-icon class="spin">sync</mat-icon>
+      <span>Verificando código...</span>
+    </div>
+
   </mat-card-content>
 
-  <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="onContinuar()">
-      Validar y continuar
+  <mat-card-actions class="otp-actions">
+    <button mat-stroked-button color="accent" (click)="clearOtp()" [disabled]="isValidating">
+      <mat-icon>clear</mat-icon>
+      Limpiar
+    </button>
+
+    <button mat-raised-button color="primary" (click)="validateOtp()" [disabled]="otpCode.length !== 6 || isValidating">
+      <mat-icon *ngIf="!isValidating">check_circle</mat-icon>
+      <mat-icon *ngIf="isValidating" class="spin">sync</mat-icon>
+      {{isValidating ? 'Validando...' : 'Validar y Continuar'}}
     </button>
   </mat-card-actions>
 </mat-card>

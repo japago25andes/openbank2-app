@@ -1,7 +1,9 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-validacion-otp',
@@ -11,25 +13,66 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [
     CommonModule,
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIconModule,
+    FormsModule
   ]
 })
-export class ValidacionOtpComponent implements OnInit {
+export class ValidacionOtpComponent implements AfterViewInit {
   @Output() continuar = new EventEmitter<void>();
   @Output() error = new EventEmitter<any>();
+  @ViewChild('hiddenInput') hiddenInput!: ElementRef<HTMLInputElement>;
 
-  constructor() { }
+  otpCode = '';
+  displayDigits: string[] = Array(6).fill('');
+  isValidating = false;
 
-  ngOnInit() {
-    console.log('🚀 ValidacionOtpComponent cargado - Solo cuando llega al paso 2');
+  ngAfterViewInit() {
+    // Enfocar el input oculto tan pronto como el componente esté listo
+    this.focusInput();
   }
 
-  onContinuar() {
-    console.log('Validación OTP completada');
-    this.continuar.emit();
+  onCodeChanged(newCode: string) {
+    // Limpiar cualquier caracter no numérico
+    this.otpCode = newCode.replace(/\D/g, '');
+    this.updateDisplayDigits();
   }
 
-  ngOnDestroy() {
-    console.log('🔄 ValidacionOtpComponent destruido');
+  updateDisplayDigits() {
+    for (let i = 0; i < 6; i++) {
+      this.displayDigits[i] = this.otpCode[i] || '';
+    }
+  }
+
+  focusInput() {
+    // Pequeño retraso para asegurar que el input esté disponible en todos los casos
+    setTimeout(() => this.hiddenInput.nativeElement.focus(), 0);
+  }
+
+  validateOtp() {
+    if (this.otpCode.length !== 6) return;
+
+    this.isValidating = true;
+    console.log('Validando código:', this.otpCode);
+
+    setTimeout(() => {
+      this.isValidating = false;
+      if (this.otpCode === '123456') {
+        this.continuar.emit();
+      } else {
+        this.error.emit('Código OTP incorrecto');
+        this.clearOtp();
+      }
+    }, 1200);
+  }
+
+  clearOtp() {
+    this.otpCode = '';
+    this.updateDisplayDigits();
+    this.focusInput();
+  }
+
+  onVolver() {
+    // Lógica para volver si es necesario
   }
 }
