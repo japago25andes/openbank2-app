@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { DatosUsuario, ClienteResponse } from './validacion-identidad.interface';
+import { DatosUsuario, ClienteResponse, ValidacionIdentidadRequest, ValidacionIdentidadResponse } from './validacion-identidad.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,9 @@ export class ValidacionIdentidadService {
     celular: '',
     correo: ''
   });
+
+  // Signal para manejar la respuesta de validación
+  validacionResponse = signal<ValidacionIdentidadResponse | null>(null);
 
   private readonly baseUrl = '/api';
 
@@ -82,5 +85,48 @@ export class ValidacionIdentidadService {
 
     return this.http.post<ClienteResponse>(url, body, { headers });
     */
+  }
+
+  /**
+   * Convierte una fecha en formato YYYY-MM-DD a timestamp en milisegundos
+   */
+  private convertirFechaATimestamp(fecha: string): string {
+    const fechaObj = new Date(fecha);
+    return fechaObj.getTime().toString();
+  }
+
+  /**
+   * Valida la identidad del usuario con el backend
+   */
+  validarIdentidad(datosUsuario: DatosUsuario): Observable<ValidacionIdentidadResponse> {
+    const url = this.baseUrl + '/api/v1/identidad/validar';
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const request: ValidacionIdentidadRequest = {
+      idUsuarioEntidad: "OTAwNzIxOTA3LjE=",
+      paramProducto: "3635",
+      producto: "011",
+      canal: "001",
+      datosValidacion: {
+        identificacion: {
+          numero: datosUsuario.identificacion,
+          tipo: this.getCodTipoIdentificacion(datosUsuario.tipoDocumento)
+        },
+        PrimerApellido: datosUsuario.primerApellido,
+        Nombres: datosUsuario.primerNombre,
+        FechaExpedicion: {
+          timestamp: this.convertirFechaATimestamp(datosUsuario.fechaExpedicion)
+        },
+        celular: datosUsuario.celular,
+        email: datosUsuario.correo
+      }
+    };
+
+    console.log('Request de validación:', request);
+
+    return this.http.post<ValidacionIdentidadResponse>(url, request, { headers });
   }
 }

@@ -11,7 +11,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialog } from '@angular/material/dialog';
 import { MensajeComponent } from '../mensaje/mensaje.component';
 import { ValidacionIdentidadService } from './validacion-identidad.service';
-import { ClienteResponse } from './validacion-identidad.interface';
+import { ClienteResponse, ValidacionIdentidadResponse } from './validacion-identidad.interface';
 
 // Adaptador personalizado para formato DD/MM/YYYY
 export class CustomDateAdapter extends NativeDateAdapter {
@@ -132,7 +132,7 @@ export class ValidacionIdentidadComponent implements OnInit {
   onContinuar() {
     if (this.beginForm.valid) {
       // Guardar datos en el servicio
-      this.validacionService.datosUsuario.set({
+      const datosUsuario = {
         tipoDocumento: this.beginForm.get('tipoDocumento')?.value || '',
         identificacion: this.beginForm.get('identificacion')?.value || '',
         primerNombre: this.beginForm.get('primerNombre')?.value || '',
@@ -140,21 +140,57 @@ export class ValidacionIdentidadComponent implements OnInit {
         fechaExpedicion: this.beginForm.get('fechaExpedicion')?.value || '',
         celular: this.beginForm.get('celular')?.value || '',
         correo: this.beginForm.get('correo')?.value || ''
+      };
+
+      this.validacionService.datosUsuario.set(datosUsuario);
+
+      // Realizar validación de identidad
+      this.validacionService.validarIdentidad(datosUsuario).subscribe({
+        next: (response: ValidacionIdentidadResponse) => {
+          console.log('Respuesta de validación:', response);
+
+          // Verificar si el proceso fue exitoso
+          if (response.resultadoProceso === "true") {
+            // Guardar la respuesta de validación exitosa en el servicio
+            this.validacionService.validacionResponse.set(response);
+            
+            // Validación exitosa, continuar al siguiente paso
+            console.log('Validación exitosa - Continuando al OTP');
+            this.continuar.emit();
+          } else {
+            // Validación fallida, mostrar mensaje de error
+            const mensaje = this.interpretarResultadoValidacion(response);
+            this.mostrarMensaje("Validación fallida", mensaje);
+          }
+        },
+        error: (error) => {
+          console.error('Error al validar identidad:', error);
+          this.mostrarMensaje("Error de conexión", "Error al validar la información. Verifique su conexión e intente nuevamente");
+        }
       });
-
-      // Si NO es actualización (esActualizacion = false), continuar directamente
-      if (!this.esActualizacion) {
-        console.log('Modo: Nuevo - Continuando directamente');
-        this.continuar.emit();
-        return;
-      }
-
-      // Si es actualización (esActualizacion = true), validar contra backend
-      if (this.esActualizacion) {
-        console.log('Modo: Actualización - Validando contra backend');
-        this.validarContraBackend();
-      }
     }
+  }
+
+  private interpretarResultadoValidacion(response: ValidacionIdentidadResponse): string {
+    // Construir mensaje basado en las validaciones individuales
+    const errores: string[] = [];
+
+    if (response.valApellido === "false") {
+      errores.push("El apellido no coincide");
+    }
+    if (response.valNombre === "false") {
+      errores.push("El nombre no coincide");
+    }
+    if (response.valFechaExp === "false") {
+      errores.push("La fecha de expedición no coincide");
+    }
+
+    if (errores.length > 0) {
+      return `Los siguientes datos no coinciden con los registrados: ${errores.join(', ')}`;
+    }
+
+    // Si no hay errores específicos pero el proceso falló
+    return "Los datos ingresados no pudieron ser validados. Verifique la información e intente nuevamente";
   }
 
   private validarContraBackend() {
@@ -241,6 +277,4 @@ export class ValidacionIdentidadComponent implements OnInit {
     });
   }
 
-  ngOnDestroy() {
-  }
 }
