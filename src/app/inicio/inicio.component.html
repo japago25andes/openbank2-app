@@ -1,5 +1,5 @@
-<mat-toolbar color="primary" class="justify-content-center">
-  <span>{{ cliente || 'OpenBank2' }}</span>
+<mat-toolbar color="primary" class="justify-content-center" *ngIf="cliente">
+  <span>{{ cliente }}</span>
 </mat-toolbar>
 
 <!-- Proceso de crédito cuando YA hay cliente -->
@@ -15,7 +15,7 @@
 
   <!-- Stepper responsivo -->
   <mat-stepper [linear]="true" #stepper [selectedIndex]="currentStepIndex" [disableRipple]="true"
-    style="background-color: var(--background);" class="responsive-stepper">
+    style="background-color: var(--background);" class="responsive-stepper no-step-click">
 
     <mat-step [editable]="false">
       <ng-template matStepLabel>Validación Identidad</ng-template>

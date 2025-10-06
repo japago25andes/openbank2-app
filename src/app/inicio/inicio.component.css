@@ -89,3 +89,24 @@
 .responsive-stepper ::ng-deep .mat-stepper-horizontal-line {
   border-top-color: var(--borders) !important;
 }
+
+/* Deshabilitar clics en los headers de los steps */
+.no-step-click ::ng-deep .mat-step-header {
+  pointer-events: none !important;
+  cursor: default !important;
+}
+
+.no-step-click ::ng-deep .mat-step-header .mat-step-icon,
+.no-step-click ::ng-deep .mat-step-header .mat-step-label {
+  pointer-events: none !important;
+  cursor: default !important;
+}
+
+/* Mantener la apariencia visual pero sin interacción */
+.no-step-click ::ng-deep .mat-step-header:hover {
+  background-color: transparent !important;
+}
+
+.no-step-click ::ng-deep .mat-step-header .mat-ripple {
+  display: none !important;
+}

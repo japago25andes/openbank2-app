@@ -138,7 +138,7 @@ html, body {
 
 /* Forzar colores en componentes que no usan variables */
 .mat-toolbar, .mat-mdc-toolbar {
-  background-color: var(--color-primario) !important;
+  background: linear-gradient(135deg, var(--color-primario), var(--color-secundario)) !important;
   color: white !important;
 }
 
