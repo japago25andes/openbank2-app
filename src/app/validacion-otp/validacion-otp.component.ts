@@ -83,7 +83,4 @@ export class ValidacionOtpComponent implements AfterViewInit {
     this.focusInput();
   }
 
-  onVolver() {
-    // Lógica para volver si es necesario
-  }
 }
