@@ -153,7 +153,7 @@ export class ValidacionIdentidadComponent implements OnInit {
           if (response.resultadoProceso === "true") {
             // Guardar la respuesta de validación exitosa en el servicio
             this.validacionService.validacionResponse.set(response);
-            
+
             // Validación exitosa, continuar al siguiente paso
             console.log('Validación exitosa - Continuando al OTP');
             this.continuar.emit();
@@ -191,37 +191,6 @@ export class ValidacionIdentidadComponent implements OnInit {
 
     // Si no hay errores específicos pero el proceso falló
     return "Los datos ingresados no pudieron ser validados. Verifique la información e intente nuevamente";
-  }
-
-  private validarContraBackend() {
-    const datos = this.validacionService.datosUsuario();
-    const codTipo = this.validacionService.getCodTipoIdentificacion(datos.tipoDocumento);
-    const entidad = this.validacionService.requestEntidad();
-
-    this.validacionService.getCliente(datos.identificacion, codTipo, entidad).subscribe({
-      next: (clienteResponse) => {
-        if (clienteResponse.codigo === "1") {
-          // Cliente encontrado, validar datos
-          const datosValidos = this.validarDatosUsuario(clienteResponse);
-
-          if (datosValidos) {
-            // Datos válidos, continuar
-            console.log('Datos válidos - Continuando');
-            this.continuar.emit();
-          } else {
-            // Datos inválidos
-            this.mostrarMensaje("Validar datos", "Los datos ingresados no coinciden con los registrados");
-          }
-        } else {
-          // Cliente no encontrado
-          this.mostrarMensaje("Validar datos", "Cliente no registrado");
-        }
-      },
-      error: (error) => {
-        console.error('Error al validar cliente:', error);
-        this.mostrarMensaje("Error", "Error al validar la información. Intente nuevamente");
-      }
-    });
   }
 
   // Método para validar datos del formulario contra la respuesta del backend

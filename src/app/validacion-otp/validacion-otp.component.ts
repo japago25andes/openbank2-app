@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
+import { ValidacionIdentidadService } from '../validacion-identidad/validacion-identidad.service';
 
 @Component({
   selector: 'app-validacion-otp',
@@ -26,6 +27,16 @@ export class ValidacionOtpComponent implements AfterViewInit {
   otpCode = '';
   displayDigits: string[] = Array(6).fill('');
   isValidating = false;
+
+  constructor(
+    private validacionIdentidadService: ValidacionIdentidadService
+  ) { }
+
+  ngOnInit() {
+    // Aquí puedes acceder a la respuesta de validación si es necesario
+    const validacionResponse = this.validacionIdentidadService.validacionResponse();
+    console.log('Respuesta de validación de identidad:', validacionResponse);
+  }
 
   ngAfterViewInit() {
     // Enfocar el input oculto tan pronto como el componente esté listo
