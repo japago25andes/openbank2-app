@@ -1,65 +1,242 @@
-<mat-card class="card-gradient-header card-hover">
+<mat-card class="card-gradient-header card-hover mt-4">
   <mat-card-header>
-    <mat-card-title>{{ tituloProceso }}</mat-card-title>
-    <mat-card-subtitle>Cargar documentos requeridos</mat-card-subtitle>
+    <mat-card-title>Información Personal y Financiera</mat-card-title>
+    <mat-card-subtitle>Complete los siguientes campos requeridos</mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
-    <div class="documentos-container">
+    <form class="formulario-captura">
 
-      <div class="documento-item">
-        <mat-icon class="text-primary">description</mat-icon>
-        <div class="documento-info">
-          <strong class="text-secondary">Copia de cédula</strong>
-          <input type="file"
-                 (change)="onFileSelected($event, 'cedula')"
-                 accept=".pdf,.jpg,.png"
-                 class="file-input">
+      <!-- Información Personal -->
+      <div class="seccion-formulario">
+        <h4 class="titulo-seccion">
+          <mat-icon>person</mat-icon>
+          Información Personal
+        </h4>
+
+        <div class="campos-row">
+          <mat-form-field appearance="outline" class="campo-medio">
+            <mat-label>Nombres completos</mat-label>
+            <input matInput placeholder="Ingrese sus nombres completos">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="campo-medio">
+            <mat-label>Apellidos completos</mat-label>
+            <input matInput placeholder="Ingrese sus apellidos completos">
+          </mat-form-field>
+        </div>
+
+        <div class="campos-row">
+          <mat-form-field appearance="outline" class="campo-tercio">
+            <mat-label>Fecha de nacimiento</mat-label>
+            <input matInput type="date">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="campo-tercio">
+            <mat-label>Estado civil</mat-label>
+            <mat-select>
+              <mat-option value="soltero">Soltero(a)</mat-option>
+              <mat-option value="casado">Casado(a)</mat-option>
+              <mat-option value="union_libre">Unión libre</mat-option>
+              <mat-option value="divorciado">Divorciado(a)</mat-option>
+              <mat-option value="viudo">Viudo(a)</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="campo-tercio">
+            <mat-label>Género</mat-label>
+            <mat-select>
+              <mat-option value="masculino">Masculino</mat-option>
+              <mat-option value="femenino">Femenino</mat-option>
+              <mat-option value="otro">Otro</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="campo-completo">
+          <mat-label>Dirección de residencia</mat-label>
+          <input matInput placeholder="Calle, número, barrio, ciudad">
+        </mat-form-field>
+
+        <div class="campos-row">
+          <mat-form-field appearance="outline" class="campo-medio">
+            <mat-label>Ciudad</mat-label>
+            <mat-select>
+              <mat-option value="bogota">Bogotá D.C.</mat-option>
+              <mat-option value="medellin">Medellín</mat-option>
+              <mat-option value="cali">Cali</mat-option>
+              <mat-option value="barranquilla">Barranquilla</mat-option>
+              <mat-option value="cartagena">Cartagena</mat-option>
+              <mat-option value="bucaramanga">Bucaramanga</mat-option>
+              <mat-option value="otra">Otra ciudad</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="campo-medio">
+            <mat-label>Teléfono móvil</mat-label>
+            <input matInput type="tel" placeholder="+57 300 123 4567">
+          </mat-form-field>
         </div>
       </div>
 
-      <div class="documento-item">
-        <mat-icon class="text-primary">attach_money</mat-icon>
-        <div class="documento-info">
-          <strong class="text-secondary">Comprobante de ingresos</strong>
-          <input type="file"
-                 (change)="onFileSelected($event, 'ingresos')"
-                 accept=".pdf,.jpg,.png"
-                 class="file-input">
+      <!-- Información Laboral -->
+      <div class="seccion-formulario">
+        <h4 class="titulo-seccion">
+          <mat-icon>work</mat-icon>
+          Información Laboral
+        </h4>
+
+        <div class="campos-row">
+          <mat-form-field appearance="outline" class="campo-medio">
+            <mat-label>Tipo de empleo</mat-label>
+            <mat-select>
+              <mat-option value="empleado">Empleado</mat-option>
+              <mat-option value="independiente">Independiente</mat-option>
+              <mat-option value="empresario">Empresario</mat-option>
+              <mat-option value="pensionado">Pensionado</mat-option>
+              <mat-option value="estudiante">Estudiante</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="campo-medio">
+            <mat-label>Empresa donde trabaja</mat-label>
+            <input matInput placeholder="Nombre de la empresa">
+          </mat-form-field>
+        </div>
+
+        <div class="campos-row">
+          <mat-form-field appearance="outline" class="campo-medio">
+            <mat-label>Cargo que desempeña</mat-label>
+            <input matInput placeholder="Su cargo actual">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="campo-medio">
+            <mat-label>Tiempo en el cargo</mat-label>
+            <mat-select>
+              <mat-option value="menos_1">Menos de 1 año</mat-option>
+              <mat-option value="1_2">1 - 2 años</mat-option>
+              <mat-option value="2_5">2 - 5 años</mat-option>
+              <mat-option value="5_10">5 - 10 años</mat-option>
+              <mat-option value="mas_10">Más de 10 años</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
 
-      <div class="documento-item">
-        <mat-icon class="text-primary">contacts</mat-icon>
-        <div class="documento-info">
-          <strong class="text-secondary">Referencias comerciales</strong>
-          <input type="file"
-                 (change)="onFileSelected($event, 'referencias')"
-                 accept=".pdf,.jpg,.png"
-                 class="file-input">
+      <!-- Información Financiera -->
+      <div class="seccion-formulario">
+        <h4 class="titulo-seccion">
+          <mat-icon>account_balance</mat-icon>
+          Información Financiera
+        </h4>
+
+        <div class="campos-row">
+          <mat-form-field appearance="outline" class="campo-medio">
+            <mat-label>Ingresos mensuales</mat-label>
+            <input matInput type="number" placeholder="2500000">
+            <span matPrefix>$&nbsp;</span>
+            <span matSuffix>COP</span>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="campo-medio">
+            <mat-label>Gastos mensuales aproximados</mat-label>
+            <input matInput type="number" placeholder="1800000">
+            <span matPrefix>$&nbsp;</span>
+            <span matSuffix>COP</span>
+          </mat-form-field>
+        </div>
+
+        <div class="campos-row">
+          <mat-form-field appearance="outline" class="campo-medio">
+            <mat-label>¿Tiene otros créditos activos?</mat-label>
+            <mat-select>
+              <mat-option value="si">Sí</mat-option>
+              <mat-option value="no">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="campo-medio">
+            <mat-label>Banco principal</mat-label>
+            <mat-select>
+              <mat-option value="bancolombia">Bancolombia</mat-option>
+              <mat-option value="davivienda">Davivienda</mat-option>
+              <mat-option value="bbva">BBVA</mat-option>
+              <mat-option value="banco_bogota">Banco de Bogotá</mat-option>
+              <mat-option value="colpatria">Colpatria</mat-option>
+              <mat-option value="otro">Otro banco</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
 
-    </div>
+      <!-- Información del Crédito -->
+      <div class="seccion-formulario">
+        <h4 class="titulo-seccion">
+          <mat-icon>monetization_on</mat-icon>
+          Información del Crédito Solicitado
+        </h4>
 
-    <div *ngIf="archivosSubidos.length > 0" class="archivos-subidos">
-      <h4 class="text-secondary">Archivos cargados:</h4>
-      <div *ngFor="let archivo of archivosSubidos" class="archivo-item">
-        <mat-icon class="text-accent">check_circle</mat-icon>
-        <span class="text-primary">{{ archivo.nombre }} ({{ archivo.tipo }})</span>
+        <div class="campos-row">
+          <mat-form-field appearance="outline" class="campo-medio">
+            <mat-label>Monto solicitado</mat-label>
+            <input matInput type="number" placeholder="5000000">
+            <span matPrefix>$&nbsp;</span>
+            <span matSuffix>COP</span>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="campo-medio">
+            <mat-label>Plazo deseado</mat-label>
+            <mat-select>
+              <mat-option value="12">12 meses</mat-option>
+              <mat-option value="18">18 meses</mat-option>
+              <mat-option value="24">24 meses</mat-option>
+              <mat-option value="36">36 meses</mat-option>
+              <mat-option value="48">48 meses</mat-option>
+              <mat-option value="60">60 meses</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="campo-completo">
+          <mat-label>Destino del crédito</mat-label>
+          <mat-select>
+            <mat-option value="libre_inversion">Libre inversión</mat-option>
+            <mat-option value="compra_vehiculo">Compra de vehículo</mat-option>
+            <mat-option value="mejoras_hogar">Mejoras para el hogar</mat-option>
+            <mat-option value="educacion">Educación</mat-option>
+            <mat-option value="consolidacion_deudas">Consolidación de deudas</mat-option>
+            <mat-option value="negocio">Inversión en negocio</mat-option>
+            <mat-option value="otro">Otro destino</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
-    </div>
+
+      <!-- Checkbox de términos -->
+      <div class="terminos-condiciones">
+        <mat-checkbox>
+          Acepto los términos y condiciones del servicio
+        </mat-checkbox>
+        <mat-checkbox>
+          Autorizo el tratamiento de mis datos personales
+        </mat-checkbox>
+        <mat-checkbox>
+          Acepto recibir información promocional
+        </mat-checkbox>
+      </div>
+
+    </form>
 
     <div class="loading-info">
-      <small>🔄 <em>Componente cargado dinámicamente cuando llegaste al paso 4</em></small>
+      <small>� <em>Formulario de captura de información personal y financiera</em></small>
     </div>
   </mat-card-content>
 
   <mat-card-actions>
-    <button mat-raised-button color="primary"
-            [disabled]="archivosSubidos.length === 0"
-            (click)="onContinuar()">
-      Continuar con documentos
+    <button mat-raised-button color="primary" (click)="onContinuar()">
+      Guardar información
+    </button>
+    <button mat-button color="accent">
+      Limpiar formulario
     </button>
   </mat-card-actions>
 </mat-card>
