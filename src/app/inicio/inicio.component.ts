@@ -106,12 +106,10 @@ export class InicioComponent implements OnInit {
   // Métodos del stepper (MOCK)
   onValidacionIdentidadContinuar() {
     this.currentStepIndex = 1;
-    console.log('Avanzar a Validación de Canales');
   }
 
   onValidacionOtpContinuar() {
     this.currentStepIndex = 2;
-    console.log('Avanzar a Cuestionario');
   }
 
   onValidacionOtpError(error: any) {

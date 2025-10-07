@@ -11,7 +11,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialog } from '@angular/material/dialog';
 import { MensajeComponent } from '../mensaje/mensaje.component';
 import { ValidacionIdentidadService } from './validacion-identidad.service';
-import { ClienteResponse, ValidacionIdentidadResponse } from './validacion-identidad.interface';
+import { ClienteResponse, ValidacionIdentidadResponse, ValidacionIdentidadRequest } from './validacion-identidad.interface';
 
 // Adaptador personalizado para formato DD/MM/YYYY
 export class CustomDateAdapter extends NativeDateAdapter {
@@ -144,10 +144,30 @@ export class ValidacionIdentidadComponent implements OnInit {
 
       this.validacionService.datosUsuario.set(datosUsuario);
 
+      // Armar la request de validación
+      const request: ValidacionIdentidadRequest = {
+        idUsuarioEntidad: "OTAwNzIxOTA3LjE=",
+        paramProducto: "3635",
+        producto: "011",
+        canal: "001",
+        datosValidacion: {
+          identificacion: {
+            numero: datosUsuario.identificacion,
+            tipo: this.getCodTipoIdentificacion(datosUsuario.tipoDocumento)
+          },
+          PrimerApellido: datosUsuario.primerApellido.toUpperCase(),
+          Nombres: datosUsuario.primerNombre.toUpperCase(),
+          FechaExpedicion: {
+            timestamp: this.convertirFechaATimestamp(datosUsuario.fechaExpedicion)
+          },
+          celular: datosUsuario.celular,
+          email: datosUsuario.correo.toLowerCase()
+        }
+      };
+
       // Realizar validación de identidad
-      this.validacionService.validarIdentidad(datosUsuario).subscribe({
+      this.validacionService.validarIdentidad(request).subscribe({
         next: (response: ValidacionIdentidadResponse) => {
-          console.log('Respuesta de validación:', response);
 
           // Verificar si el proceso fue exitoso
           if (response.resultadoProceso === "true") {
@@ -155,7 +175,6 @@ export class ValidacionIdentidadComponent implements OnInit {
             this.validacionService.validacionResponse.set(response);
 
             // Validación exitosa, continuar al siguiente paso
-            console.log('Validación exitosa - Continuando al OTP');
             this.continuar.emit();
           } else {
             // Validación fallida, mostrar mensaje de error
@@ -168,6 +187,39 @@ export class ValidacionIdentidadComponent implements OnInit {
           this.mostrarMensaje("Error de conexión", "Error al validar la información. Verifique su conexión e intente nuevamente");
         }
       });
+    }
+  }
+
+  /**
+   * Convierte una fecha a timestamp en milisegundos UTC
+   */
+  private convertirFechaATimestamp(fecha: string | Date): string {
+    let fechaObj: Date;
+
+    if (typeof fecha === 'string' && fecha.includes('/')) {
+      // Formato DD/MM/YYYY
+      const [dia, mes, anio] = fecha.split('/');
+      fechaObj = new Date(Date.UTC(parseInt(anio), parseInt(mes) - 1, parseInt(dia)));
+    } else {
+      // Cualquier otro formato (Date object o string ISO)
+      fechaObj = new Date(fecha);
+      fechaObj = new Date(Date.UTC(fechaObj.getFullYear(), fechaObj.getMonth(), fechaObj.getDate()));
+    }
+
+    return fechaObj.getTime().toString();
+  }
+
+  /**
+   * Obtiene el código del tipo de identificación
+   */
+  private getCodTipoIdentificacion(tipoDocumento: string): string {
+    switch (tipoDocumento) {
+      case 'Cédula de ciudadania':
+        return '1';
+      case 'Tarjeta de identidad':
+        return '2';
+      default:
+        return '1';
     }
   }
 
@@ -201,7 +253,7 @@ export class ValidacionIdentidadComponent implements OnInit {
 
     const datosForm = this.validacionService.datosUsuario();
     const clienteBD = clienteResponse.clientes[0];
-    const codTipo = this.validacionService.getCodTipoIdentificacion(datosForm.tipoDocumento);
+    const codTipo = this.getCodTipoIdentificacion(datosForm.tipoDocumento);
 
     return (
       clienteBD.tipoIdentificacion === codTipo &&
