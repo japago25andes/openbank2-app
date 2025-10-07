@@ -26,9 +26,6 @@ export class ValidacionIdentidadService {
 
   constructor(private http: HttpClient) { }
 
-  /**
-   * Valida la identidad del usuario con el backend
-   */
   validarIdentidad(request: ValidacionIdentidadRequest): Observable<ValidacionIdentidadResponse> {
     const url = this.baseUrl + '/api/v1/identidad/validar';
 

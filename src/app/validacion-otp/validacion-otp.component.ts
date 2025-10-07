@@ -5,6 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { ValidacionIdentidadService } from '../validacion-identidad/validacion-identidad.service';
+import { ValidacionOtpService } from './validacion-otp.service';
+import { VerificarOtpRequest } from './validacion-otp.interface';
 
 @Component({
   selector: 'app-validacion-otp',
@@ -29,13 +31,12 @@ export class ValidacionOtpComponent implements AfterViewInit {
   isValidating = false;
 
   constructor(
-    private validacionIdentidadService: ValidacionIdentidadService
+    private validacionIdentidadService: ValidacionIdentidadService,
+    private validacionOtpService: ValidacionOtpService
   ) { }
 
   ngOnInit() {
-    // Aquí puedes acceder a la respuesta de validación si es necesario
-    const validacionResponse = this.validacionIdentidadService.validacionResponse();
-    console.log('Respuesta de validación de identidad:', validacionResponse);
+
   }
 
   ngAfterViewInit() {
@@ -63,24 +64,70 @@ export class ValidacionOtpComponent implements AfterViewInit {
   validateOtp() {
     if (this.otpCode.length !== 6) return;
 
-    this.isValidating = true;
-    console.log('Validando código:', this.otpCode);
+    const validacionResponse = this.validacionIdentidadService.validacionResponse();
+    const datosUsuario = this.validacionIdentidadService.datosUsuario();
 
-    setTimeout(() => {
-      this.isValidating = false;
-      if (this.otpCode === '123456') {
-        this.continuar.emit();
-      } else {
-        this.error.emit('Código OTP incorrecto');
+    if (!validacionResponse || !datosUsuario) {
+      this.error.emit('No se encontraron los datos de validación');
+      return;
+    }
+
+    this.isValidating = true;
+
+    // Armar la request de verificación OTP
+    const request: VerificarOtpRequest = {
+      Identificacion: {
+        numero: datosUsuario.identificacion,
+        tipo: validacionResponse.identificacion.tipo
+      },
+      regValidacion: validacionResponse.regValidacion,
+      idTransaccionOTP: validacionResponse.solicitarDatos.resultadoGeneracion.idTransaccionOTP,
+      requiereCuestionario: validacionResponse.solicitarDatos.resultadoGeneracion.requiereCuestionario,
+      Otp: this.otpCode
+    };
+
+    // Realizar verificación de OTP
+    this.validacionOtpService.verificarOtp(request).subscribe({
+      next: (response) => {
+        this.isValidating = false;
+
+        if (response.requiereCuestionario === "true") {
+          this.continuar.emit();
+        } else {
+          this.error.emit(response.mensajeValidacion || 'Código OTP incorrecto');
+          this.clearOtp();
+        }
+      },
+      error: (error) => {
+        this.isValidating = false;
+        console.error('Error al verificar OTP:', error);
+        this.error.emit('Error de conexión. Intente nuevamente');
         this.clearOtp();
       }
-    }, 1200);
+    });
   }
 
   clearOtp() {
     this.otpCode = '';
     this.updateDisplayDigits();
     this.focusInput();
+  }
+
+  getCelularMask(): string {
+    const datosUsuario = this.validacionIdentidadService.datosUsuario();
+    if (!datosUsuario || !datosUsuario.celular) {
+      return '***-***-****';
+    }
+
+    const celular = datosUsuario.celular;
+
+    // Si el celular tiene 10 dígitos (ej: 3188895177)
+    if (celular.length === 10) {
+      return `***-***-${celular.slice(-4)}`;
+    }
+
+    // Para otros formatos, mostrar solo los últimos 4 dígitos
+    return `***-***-${celular.slice(-4)}`;
   }
 
 }
