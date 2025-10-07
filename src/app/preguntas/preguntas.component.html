@@ -1,47 +1,73 @@
-<mat-card class="card-gradient-header card-hover">
+<mat-card class="card-gradient-header card-hover mt-4">
   <mat-card-header>
-    <mat-card-title>Cuestionario</mat-card-title>
-    <mat-card-subtitle>Preguntas de validación crediticia</mat-card-subtitle>
+    <mat-card-title>Cuestionario de Seguridad</mat-card-title>
+    <mat-card-subtitle>
+      {{ cuestionarioData ? 'Responde las siguientes preguntas para completar la validación' : 'Generando preguntas...' }}
+    </mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
-    <form [formGroup]="cuestionarioForm" (ngSubmit)="onContinuar()">
+    <!-- Estado de carga -->
+    <div *ngIf="isLoading; else mostrarCuestionario" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p class="loading-text">Generando preguntas de seguridad...</p>
+    </div>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Ingreso mensual (COP)</mat-label>
-        <input matInput type="number" formControlName="ingresoMensual" placeholder="Ej: 2500000">
-        <mat-error *ngIf="cuestionarioForm.get('ingresoMensual')?.hasError('required')">
-          El ingreso mensual es requerido
-        </mat-error>
-      </mat-form-field>
+    <!-- Cuestionario con preguntas -->
+    <ng-template #mostrarCuestionario>
+      <div *ngIf="cuestionarioData && cuestionarioForm">
+        <form [formGroup]="cuestionarioForm" (ngSubmit)="onVerificarRespuestas()">
 
-      <div class="form-group">
-        <label class="text-secondary"><strong>¿Tiene otros créditos activos?</strong></label>
-        <mat-radio-group formControlName="tieneOtrosCreditos">
-          <mat-radio-button value="si">Sí</mat-radio-button>
-          <mat-radio-button value="no">No</mat-radio-button>
-        </mat-radio-group>
+          <!-- Iterar sobre las preguntas -->
+          <div *ngFor="let pregunta of cuestionarioData.preguntas.pregunta; let i = index" class="pregunta-container">
+            <div class="pregunta-numero">Pregunta {{ i + 1 }}</div>
+            <div class="pregunta-texto">{{ pregunta.texto }}</div>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Selecciona tu respuesta</mat-label>
+              <mat-select [formControlName]="'pregunta_' + pregunta.id">
+                <mat-option *ngFor="let respuesta of pregunta.respuesta" [value]="respuesta.id">
+                  {{ respuesta.texto }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="cuestionarioForm.get('pregunta_' + pregunta.id)?.hasError('required')">
+                Debes seleccionar una respuesta
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+        </form>
+
+        <!-- Mensaje si no hay preguntas -->
+        <div *ngIf="!cuestionarioData.preguntas.pregunta || cuestionarioData.preguntas.pregunta.length === 0" class="no-preguntas">
+          <p>No se pudieron cargar las preguntas. Por favor intenta nuevamente.</p>
+          <button mat-button color="primary" (click)="generarCuestionario()">
+            Generar nuevamente
+          </button>
+        </div>
       </div>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Monto solicitado (COP)</mat-label>
-        <input matInput type="number" formControlName="montoSolicitado" placeholder="Ej: 5000000">
-        <mat-error *ngIf="cuestionarioForm.get('montoSolicitado')?.hasError('required')">
-          El monto solicitado es requerido
-        </mat-error>
-      </mat-form-field>
-
-    </form>
-
-    <div class="loading-info">
-      <small>🔄 <em>Componente cargado dinámicamente cuando llegaste al paso 3</em></small>
-    </div>
+      <!-- Mensaje cuando no hay cuestionario -->
+      <div *ngIf="!cuestionarioData && !isLoading" class="error-container">
+        <p class="error-text">Hubo un problema al generar las preguntas.</p>
+        <button mat-raised-button color="primary" (click)="generarCuestionario()">
+          Intentar nuevamente
+        </button>
+      </div>
+    </ng-template>
   </mat-card-content>
 
   <mat-card-actions>
-    <button mat-raised-button color="primary"
-            (click)="onContinuar()">
-      Enviar cuestionario
+    <button mat-raised-button
+            color="primary"
+            [disabled]="!cuestionarioForm.valid || isValidating"
+            (click)="onVerificarRespuestas()"
+            *ngIf="cuestionarioData && !isLoading">
+      <span *ngIf="!isValidating">Verificar Respuestas</span>
+      <span *ngIf="isValidating">
+        <mat-spinner diameter="20" style="display: inline-block; margin-right: 8px;"></mat-spinner>
+        Verificando...
+      </span>
     </button>
   </mat-card-actions>
 </mat-card>
