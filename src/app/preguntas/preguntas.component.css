@@ -86,3 +86,26 @@ mat-radio-group {
 mat-card-content p {
   margin: 8px 0;
 }
+
+/* ANIMACIÓN PARA ICONOS */
+.spin {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ACCIONES - Mismo estilo que OTP */
+.otp-actions {
+  display: flex;
+  gap: 16px;
+  padding: 16px 24px 24px;
+  justify-content: flex-end;
+}
+
+.otp-actions button {
+  border-radius: 10px;
+  font-weight: 500;
+}
