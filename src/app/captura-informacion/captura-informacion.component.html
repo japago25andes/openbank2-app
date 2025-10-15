@@ -14,6 +14,9 @@
         <h4 class="titulo-seccion">
           <mat-icon>person</mat-icon>
           Información Personal
+          <small *ngIf="cargandoCiudades" style="margin-left: 10px; color: #666;">
+            (Cargando ciudades...)
+          </small>
         </h4>
 
         <div class="campos-row">
@@ -72,8 +75,19 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-tercio">
-            <mat-label>Código DANE expedición</mat-label>
-            <input matInput name="codigoDaneExpedicion" placeholder="Ciudad expedición documento">
+            <mat-label>Ciudad expedición documento</mat-label>
+            <input matInput
+                   [formControl]="ciudadExpedicionControl"
+                   [matAutocomplete]="autoExpedicion"
+                   placeholder="Buscar ciudad...">
+            <mat-autocomplete #autoExpedicion="matAutocomplete"
+                              [displayWith]="displayCiudad"
+                              (optionSelected)="onCiudadSeleccionada($event.option.value, 'expedicion')">
+              <mat-option *ngFor="let ciudad of ciudadesExpedicion | async" [value]="ciudad">
+                {{ ciudad.ciudad }} - {{ ciudad.departamento }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-icon matSuffix>search</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-tercio">
@@ -95,8 +109,19 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-medio">
-            <mat-label>Código DANE nacimiento</mat-label>
-            <input matInput name="codigoDaneNacimiento" placeholder="Ciudad de nacimiento">
+            <mat-label>Ciudad de nacimiento</mat-label>
+            <input matInput
+                   [formControl]="ciudadNacimientoControl"
+                   [matAutocomplete]="autoNacimiento"
+                   placeholder="Buscar ciudad...">
+            <mat-autocomplete #autoNacimiento="matAutocomplete"
+                              [displayWith]="displayCiudad"
+                              (optionSelected)="onCiudadSeleccionada($event.option.value, 'nacimiento')">
+              <mat-option *ngFor="let ciudad of ciudadesNacimiento | async" [value]="ciudad">
+                {{ ciudad.ciudad }} - {{ ciudad.departamento }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-icon matSuffix>search</mat-icon>
           </mat-form-field>
         </div>
 
@@ -107,8 +132,20 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-medio">
-            <mat-label>Código DANE residencia</mat-label>
-            <input matInput name="codigoDaneResidencia" required placeholder="Código DANE ciudad residencia">
+            <mat-label>Ciudad de residencia</mat-label>
+            <input matInput
+                   [formControl]="ciudadResidenciaControl"
+                   [matAutocomplete]="autoResidencia"
+                   required
+                   placeholder="Buscar ciudad...">
+            <mat-autocomplete #autoResidencia="matAutocomplete"
+                              [displayWith]="displayCiudad"
+                              (optionSelected)="onCiudadSeleccionada($event.option.value, 'residencia')">
+              <mat-option *ngFor="let ciudad of ciudadesResidencia | async" [value]="ciudad">
+                {{ ciudad.ciudad }} - {{ ciudad.departamento }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-icon matSuffix>search</mat-icon>
           </mat-form-field>
         </div>
 
@@ -156,8 +193,20 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-medio">
-            <mat-label>Código DANE trabajo</mat-label>
-            <input matInput name="codigoDaneTrabajo" required placeholder="Código DANE ciudad trabajo">
+            <mat-label>Ciudad de trabajo</mat-label>
+            <input matInput
+                   [formControl]="ciudadTrabajoControl"
+                   [matAutocomplete]="autoTrabajo"
+                   required
+                   placeholder="Buscar ciudad...">
+            <mat-autocomplete #autoTrabajo="matAutocomplete"
+                              [displayWith]="displayCiudad"
+                              (optionSelected)="onCiudadSeleccionada($event.option.value, 'trabajo')">
+              <mat-option *ngFor="let ciudad of ciudadesTrabajo | async" [value]="ciudad">
+                {{ ciudad.ciudad }} - {{ ciudad.departamento }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-icon matSuffix>search</mat-icon>
           </mat-form-field>
         </div>
 
