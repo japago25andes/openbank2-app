@@ -309,6 +309,117 @@
         </div>
       </div>
 
+      <!-- Información Complementaria (Campos Dinámicos) -->
+      <div class="seccion-formulario" [formGroup]="camposDinamicosForm">
+        <h4 class="titulo-seccion">
+          <mat-icon>dynamic_form</mat-icon>
+          Información Complementaria
+          <small *ngIf="cargandoCamposDinamicos" style="margin-left: 10px; color: #666;">
+            (Cargando campos...)
+          </small>
+        </h4>
+
+        <!-- Mostrar mensaje si no hay campos -->
+        <div *ngIf="!cargandoCamposDinamicos && camposDinamicos.length === 0" class="no-campos-dinamicos">
+          <p style="text-align: center; color: #666; font-style: italic;">
+            No hay campos complementarios configurados para esta entidad.
+          </p>
+        </div>
+
+        <!-- Renderizar campos dinámicos -->
+        <div *ngFor="let campo of camposDinamicos" class="campo-dinamico-container">
+
+          <!-- DROPDOWN - Cuando tiene registrosTablaMaestra -->
+          <mat-form-field
+            *ngIf="campo.tipo === TipoCampoDinamico.DROPDOWN"
+            appearance="outline"
+            class="campo-completo">
+            <mat-label>{{ campo.descripcion }}</mat-label>
+            <mat-select
+              [formControlName]="campo.campo"
+              [required]="campo.required"
+              (selectionChange)="onCampoDinamicoSeleccionado(campo, $event.value)">
+              <mat-option
+                *ngFor="let registro of campo.registrosTablaMaestra"
+                [value]="registro.Codigo">
+                {{ registro.Detalle }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="hasCampoDinamicoError(campo.campo)">
+              {{ campo.descripcion }} es requerido
+            </mat-error>
+          </mat-form-field>
+
+          <!-- CAMPO FECHA - Cuando tipo es FECHA -->
+          <mat-form-field
+            *ngIf="campo.tipo === TipoCampoDinamico.FECHA"
+            appearance="outline"
+            class="campo-medio">
+            <mat-label>{{ campo.descripcion }}</mat-label>
+            <input
+              matInput
+              type="date"
+              [formControlName]="campo.campo"
+              [required]="campo.required"
+              placeholder="Seleccione fecha">
+            <mat-error *ngIf="hasCampoDinamicoError(campo.campo)">
+              {{ campo.descripcion }} es requerido
+            </mat-error>
+          </mat-form-field>
+
+          <!-- CAMPO NÚMERO - Cuando tipo es NUMERO -->
+          <mat-form-field
+            *ngIf="campo.tipo === TipoCampoDinamico.NUMERO"
+            appearance="outline"
+            class="campo-medio">
+            <mat-label>{{ campo.descripcion }}</mat-label>
+            <input
+              matInput
+              type="number"
+              [formControlName]="campo.campo"
+              [required]="campo.required"
+              placeholder="Ingrese valor numérico"
+              min="0"
+              step="0.01">
+            <mat-error *ngIf="hasCampoDinamicoError(campo.campo)">
+              {{ campo.descripcion }} es requerido
+            </mat-error>
+          </mat-form-field>
+
+          <!-- CAMPO TEXTO - Por defecto o cuando tipo es TEXTO -->
+          <mat-form-field
+            *ngIf="campo.tipo === TipoCampoDinamico.TEXTO"
+            appearance="outline"
+            class="campo-completo">
+            <mat-label>{{ campo.descripcion }}</mat-label>
+            <input
+              matInput
+              type="text"
+              [formControlName]="campo.campo"
+              [required]="campo.required"
+              [placeholder]="'Ingrese ' + campo.descripcion.toLowerCase()">
+            <mat-error *ngIf="hasCampoDinamicoError(campo.campo)">
+              {{ campo.descripcion }} es requerido
+            </mat-error>
+          </mat-form-field>
+
+        </div>
+
+        <!-- TODO: Información de ayuda para backend -->
+        <!--
+        PALABRAS CLAVE PARA TIPOS DE CAMPO (ajustar desde backend si es necesario):
+
+        FECHA:
+        - "fecha", "ingreso laboral"
+
+        NUMERO:
+        - "numero", "valor", "ingreso", "salario", "monto"
+
+        Por defecto: TEXTO
+        -->
+
+      </div>
+
     </form>
 
   </mat-card-content>

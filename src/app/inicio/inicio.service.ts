@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
@@ -13,6 +13,9 @@ export class InicioService {
     user: 'VirtualCredit',
     password: 'FIvuEV9q3BN9Z&@82c8b'
   };
+
+  // Signal para código de entidad
+  codigoEntidad = signal<string>('00000040');
 
   constructor(private http: HttpClient) { }
 
@@ -54,6 +57,10 @@ export class InicioService {
 
     return this.http.post<Entidad>(url, requestBody, { headers })
       .pipe(
+        tap(() => {
+          // Actualizar el signal con el código de entidad
+          this.codigoEntidad.set(codigoEntidad);
+        }),
         catchError(error => {
           return throwError(() => error);
         })

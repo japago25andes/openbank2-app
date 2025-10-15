@@ -12,7 +12,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Observable, map, startWith, Subject, takeUntil } from 'rxjs';
 import { CapturaInformacionService } from './captura-informacion.service';
-import { Ciudad } from './captura-informacion.interface';
+import {
+  Ciudad,
+  CampoDinamicoProcessado,
+  TipoCampoDinamico
+} from './captura-informacion.interface';
 
 @Component({
   selector: 'app-captura-informacion',
@@ -55,10 +59,16 @@ export class CapturaInformacionComponent implements OnInit, OnDestroy {
 
   // Estado de carga
   cargandoCiudades = false;
+  cargandoCamposDinamicos = false;
 
-  private destroy$ = new Subject<void>();
+  // ===== CAMPOS DINÁMICOS =====
+  camposDinamicos: CampoDinamicoProcessado[] = [];
+  camposDinamicosForm: FormGroup = new FormGroup({});
 
-  constructor(
+  // Enum expuesto para usar en template
+  TipoCampoDinamico = TipoCampoDinamico;
+
+  private destroy$ = new Subject<void>();  constructor(
     private fb: FormBuilder,
     private capturaInformacionService: CapturaInformacionService
   ) {
@@ -111,11 +121,10 @@ export class CapturaInformacionComponent implements OnInit, OnDestroy {
     console.log('🚀 CapturaInformacionComponent cargado - Solo cuando llega al paso 4');
     console.log('Título del proceso:', this.tituloProceso);
 
-    // Cargar ciudades al inicializar el componente
+    // Cargar datos al inicializar el componente
     this.cargarCiudades();
-  }
-
-  /**
+    this.cargarCamposDinamicos();
+  }  /**
    * Cargar ciudades (delegado al servicio)
    */
   private cargarCiudades(): void {
@@ -220,6 +229,70 @@ export class CapturaInformacionComponent implements OnInit, OnDestroy {
   onContinuar() {
     console.log('Documentos capturados:');
     this.continuar.emit();
+  }
+
+  // ===== MÉTODOS PARA CAMPOS DINÁMICOS =====
+
+  /**
+   * Cargar campos dinámicos desde el servicio
+   */
+  private cargarCamposDinamicos(): void {
+    this.cargandoCamposDinamicos = true;
+
+    this.capturaInformacionService.cargarCamposDinamicos()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (campos: CampoDinamicoProcessado[]) => {
+          this.camposDinamicos = campos;
+          this.crearFormularioDinamico(campos);
+          this.cargandoCamposDinamicos = false;
+          console.log('Campos dinámicos cargados:', campos.length);
+        },
+        error: (error: any) => {
+          console.error('Error al cargar campos dinámicos:', error);
+          this.cargandoCamposDinamicos = false;
+        }
+      });
+  }
+
+  /**
+   * Crear formulario dinámico basado en los campos obtenidos
+   */
+  private crearFormularioDinamico(campos: CampoDinamicoProcessado[]): void {
+    const formControls: { [key: string]: FormControl } = {};
+
+    campos.forEach(campo => {
+      // Todos los campos son obligatorios según requerimientos
+      const validators = campo.required ? [Validators.required] : [];
+      formControls[campo.campo] = new FormControl('', validators);
+    });
+
+    this.camposDinamicosForm = new FormGroup(formControls);
+  }
+
+  /**
+   * Manejar selección en dropdowns dinámicos
+   */
+  onCampoDinamicoSeleccionado(campo: CampoDinamicoProcessado, valor: string): void {
+    console.log(`Campo dinámico ${campo.campo} seleccionado:`, valor);
+
+    // El valor es el 'Codigo' según requerimientos
+    this.camposDinamicosForm.get(campo.campo)?.setValue(valor);
+  }
+
+  /**
+   * Obtener el valor actual de un campo dinámico
+   */
+  getCampoDinamicoValue(nombreCampo: string): any {
+    return this.camposDinamicosForm.get(nombreCampo)?.value;
+  }
+
+  /**
+   * Verificar si un campo dinámico tiene errores
+   */
+  hasCampoDinamicoError(nombreCampo: string): boolean {
+    const campo = this.camposDinamicosForm.get(nombreCampo);
+    return !!(campo?.invalid && (campo?.dirty || campo?.touched));
   }
 
   ngOnDestroy() {
