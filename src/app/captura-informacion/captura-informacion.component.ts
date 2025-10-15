@@ -46,16 +46,56 @@ export class CapturaInformacionComponent implements OnInit {
     console.log('Título del proceso:', this.tituloProceso);
   }
 
-  onFileSelected(event: any, tipo: string) {
-    const file = event.target.files[0];
-    if (file) {
-      this.archivosSubidos.push({
-        tipo: tipo,
-        nombre: file.name,
-        tamanio: file.size
-      });
-      console.log('Archivo seleccionado:', file.name);
+
+  // Formatear moneda mientras se escribe
+  formatCurrency(event: any, fieldName: string) {
+    let value = event.target.value;
+
+    // Remover caracteres no numéricos excepto punto
+    value = value.replace(/[^\d.]/g, '');
+
+    // Limitar a solo un punto decimal
+    const parts = value.split('.');
+    if (parts.length > 2) {
+      value = parts[0] + '.' + parts.slice(1).join('');
     }
+
+    // Limitar decimales a 2 dígitos
+    if (parts.length === 2 && parts[1].length > 2) {
+      value = parts[0] + '.' + parts[1].substring(0, 2);
+    }
+
+    // Formatear con comas para miles (solo la parte entera)
+    if (parts.length >= 1 && parts[0].length > 3) {
+      const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      value = parts.length === 2 ? integerPart + '.' + parts[1] : integerPart;
+    }
+
+    event.target.value = value;
+  }
+
+  // Formatear moneda al salir del campo (blur)
+  formatCurrencyOnBlur(event: any, fieldName: string) {
+    let value = event.target.value;
+
+    if (value && !value.includes('.')) {
+      // Agregar .00 si no tiene decimales
+      event.target.value = value + '.00';
+    } else if (value && value.endsWith('.')) {
+      // Agregar 00 si termina solo con punto
+      event.target.value = value + '00';
+    } else if (value && value.includes('.')) {
+      // Asegurar que tenga 2 decimales
+      const parts = value.split('.');
+      if (parts[1].length === 1) {
+        event.target.value = value + '0';
+      }
+    }
+  }
+
+  // Obtener valor numérico limpio (sin comas ni formato)
+  getNumericValue(formattedValue: string): number {
+    return parseFloat(formattedValue.replace(/,/g, '')) || 0;
   }
 
   onContinuar() {
@@ -66,7 +106,4 @@ export class CapturaInformacionComponent implements OnInit {
     });
   }
 
-  ngOnDestroy() {
-    console.log('🔄 CapturaInformacionComponent destruido');
-  }
 }
