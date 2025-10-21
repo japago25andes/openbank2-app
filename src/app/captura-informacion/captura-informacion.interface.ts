@@ -64,3 +64,55 @@ export interface CampoDinamicoProcessado extends CampoDinamico {
   inputType?: string;       // 'text', 'number', 'date'
   required: boolean;        // Todos son obligatorios según requerimientos
 }
+
+// ===== INTERFACES PARA ALMACENAMIENTO DE DATOS DEL FORMULARIO =====
+
+// Interfaz para ciudad seleccionada (con código DANE)
+export interface CiudadSeleccionada {
+  ciudad: string;
+  departamento: string;
+  codigoDane: string;
+}
+
+// Interfaz para todos los datos capturados del formulario
+export interface DatosFormularioCaptura {
+  // Información Personal
+  tipoIdentificacion: string;
+  identificacion: string;
+  sexo: string;
+  primerNombre: string;
+  segundoNombre: string;
+  primerApellido: string;
+  segundoApellido: string;
+  fechaExpedicion: string;
+  ciudadExpedicion?: CiudadSeleccionada;
+  estadoCivil: string;
+  fechaNacimiento: string;
+  ciudadNacimiento?: CiudadSeleccionada;
+  direccionResidencia: string;
+  ciudadResidencia?: CiudadSeleccionada;
+  telefonoResidencia: string;
+  movil: string;
+  email: string;
+
+  // Información Laboral
+  sitioTrabajo: string;
+  cargo: string;
+  direccionTrabajo: string;
+  ciudadTrabajo?: CiudadSeleccionada;
+  telefonoTrabajo: string;
+  tipoContrato: string;
+  salario: string;
+
+  // Información Adicional
+  codOficina: string;
+
+  // Información Financiera Opcional
+  valorAporte?: string;
+  periodicidad?: string;
+  fechaProximoPago?: string;
+  formaPago?: string;
+
+  // Campos Dinámicos
+  camposDinamicos: { [key: string]: any };
+}

@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, map, catchError, of } from 'rxjs';
 import {
@@ -9,7 +9,8 @@ import {
   DiccionarioCamposRequest,
   CampoDinamico,
   CampoDinamicoProcessado,
-  TipoCampoDinamico
+  TipoCampoDinamico,
+  DatosFormularioCaptura
 } from './captura-informacion.interface';
 import { InicioService } from '../inicio/inicio.service';
 
@@ -25,6 +26,9 @@ export class CapturaInformacionService {
 
   // Cache de ciudades para evitar múltiples llamadas
   private ciudadesCache$ = new BehaviorSubject<Ciudad[]>([]);
+
+  // Signal para almacenar los datos del formulario capturados
+  datosFormulario = signal<DatosFormularioCaptura | null>(null);
 
   constructor(private http: HttpClient) {}
 
@@ -177,5 +181,21 @@ export class CapturaInformacionService {
       default:
         return 'text';
     }
+  }
+
+  /**
+   * Guardar los datos del formulario capturados
+   */
+  guardarDatosFormulario(datos: DatosFormularioCaptura): void {
+    this.datosFormulario.set(datos);
+    console.log('📋 Datos del formulario guardados en el servicio:', datos);
+  }
+
+  /**
+   * Limpiar los datos del formulario
+   */
+  limpiarDatosFormulario(): void {
+    this.datosFormulario.set(null);
+    console.log('🗑️ Datos del formulario limpiados');
   }
 }

@@ -7,7 +7,7 @@
   </mat-card-header>
 
   <mat-card-content>
-    <form class="formulario-captura">
+    <form class="formulario-captura" [formGroup]="formularioPrincipal">
 
       <!-- Información Personal -->
       <div class="seccion-formulario">
@@ -22,7 +22,7 @@
         <div class="campos-row">
           <mat-form-field appearance="outline" class="campo-tercio">
             <mat-label>Tipo de identificación</mat-label>
-            <mat-select name="tipoIdentificacion" required>
+            <mat-select formControlName="tipoIdentificacion" required>
               <mat-option value="CC">Cédula de Ciudadanía</mat-option>
               <mat-option value="CE">Cédula de Extranjería</mat-option>
               <mat-option value="PA">Pasaporte</mat-option>
@@ -32,12 +32,12 @@
 
           <mat-form-field appearance="outline" class="campo-tercio">
             <mat-label>Identificación</mat-label>
-            <input matInput name="identificacion" required placeholder="Número de identificación">
+            <input matInput formControlName="identificacion" required placeholder="Número de identificación">
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-tercio">
             <mat-label>Sexo</mat-label>
-            <mat-select name="sexo" required>
+            <mat-select formControlName="sexo" required>
               <mat-option value="M">Masculino</mat-option>
               <mat-option value="F">Femenino</mat-option>
             </mat-select>
@@ -47,31 +47,31 @@
         <div class="campos-row">
           <mat-form-field appearance="outline" class="campo-medio">
             <mat-label>Primer nombre</mat-label>
-            <input matInput name="primerNombre" required placeholder="Primer nombre">
+            <input matInput formControlName="primerNombre" required placeholder="Primer nombre">
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-medio">
             <mat-label>Segundo nombre</mat-label>
-            <input matInput name="segundoNombre" required placeholder="Segundo nombre">
+            <input matInput formControlName="segundoNombre" required placeholder="Segundo nombre">
           </mat-form-field>
         </div>
 
         <div class="campos-row">
           <mat-form-field appearance="outline" class="campo-medio">
             <mat-label>Primer apellido</mat-label>
-            <input matInput name="primerApellido" required placeholder="Primer apellido">
+            <input matInput formControlName="primerApellido" required placeholder="Primer apellido">
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-medio">
             <mat-label>Segundo apellido</mat-label>
-            <input matInput name="segundoApellido" required placeholder="Segundo apellido">
+            <input matInput formControlName="segundoApellido" required placeholder="Segundo apellido">
           </mat-form-field>
         </div>
 
         <div class="campos-row">
           <mat-form-field appearance="outline" class="campo-tercio">
             <mat-label>Fecha de expedición</mat-label>
-            <input matInput type="date" name="fechaExpedicion" required placeholder="MM/DD/YYYY">
+            <input matInput type="date" formControlName="fechaExpedicion" required placeholder="MM/DD/YYYY">
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-tercio">
@@ -92,7 +92,7 @@
 
           <mat-form-field appearance="outline" class="campo-tercio">
             <mat-label>Estado civil</mat-label>
-            <mat-select name="estadoCivil" required>
+            <mat-select formControlName="estadoCivil" required>
               <mat-option value="S">Soltero(a)</mat-option>
               <mat-option value="C">Casado(a)</mat-option>
               <mat-option value="U">Unión libre</mat-option>
@@ -105,7 +105,7 @@
         <div class="campos-row">
           <mat-form-field appearance="outline" class="campo-medio">
             <mat-label>Fecha de nacimiento</mat-label>
-            <input matInput type="date" name="fechaNacimiento" required placeholder="MM/DD/YYYY">
+            <input matInput type="date" formControlName="fechaNacimiento" required placeholder="MM/DD/YYYY">
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-medio">
@@ -128,7 +128,7 @@
         <div class="campos-row">
           <mat-form-field appearance="outline" class="campo-medio">
             <mat-label>Dirección de residencia</mat-label>
-            <input matInput name="direccionResidencia" required placeholder="Dirección completa de residencia">
+            <input matInput formControlName="direccionResidencia" required placeholder="Dirección completa de residencia">
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-medio">
@@ -152,17 +152,17 @@
         <div class="campos-row">
           <mat-form-field appearance="outline" class="campo-tercio">
             <mat-label>Teléfono residencia</mat-label>
-            <input matInput type="tel" name="telefonoResidencia" required placeholder="Teléfono de residencia">
+            <input matInput type="tel" formControlName="telefonoResidencia" required placeholder="Teléfono de residencia">
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-tercio">
             <mat-label>Móvil</mat-label>
-            <input matInput type="tel" name="movil" required placeholder="Teléfono móvil">
+            <input matInput type="tel" formControlName="movil" required placeholder="Teléfono móvil">
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-tercio">
             <mat-label>Email</mat-label>
-            <input matInput type="email" name="email" required placeholder="correo@ejemplo.com">
+            <input matInput type="email" formControlName="email" required placeholder="correo@ejemplo.com">
           </mat-form-field>
         </div>
       </div>
@@ -177,19 +177,19 @@
         <div class="campos-row">
           <mat-form-field appearance="outline" class="campo-medio">
             <mat-label>Sitio de trabajo</mat-label>
-            <input matInput name="sitioTrabajo" required placeholder="Nombre de la empresa o sitio de trabajo">
+            <input matInput formControlName="sitioTrabajo" required placeholder="Nombre de la empresa o sitio de trabajo">
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-medio">
             <mat-label>Cargo</mat-label>
-            <input matInput name="cargo" required placeholder="Cargo que desempeña">
+            <input matInput formControlName="cargo" required placeholder="Cargo que desempeña">
           </mat-form-field>
         </div>
 
         <div class="campos-row">
           <mat-form-field appearance="outline" class="campo-medio">
             <mat-label>Dirección de trabajo</mat-label>
-            <input matInput name="direccionTrabajo" required placeholder="Dirección completa del trabajo">
+            <input matInput formControlName="direccionTrabajo" required placeholder="Dirección completa del trabajo">
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-medio">
@@ -213,12 +213,12 @@
         <div class="campos-row">
           <mat-form-field appearance="outline" class="campo-tercio">
             <mat-label>Teléfono trabajo</mat-label>
-            <input matInput type="tel" name="telefonoTrabajo" required placeholder="Teléfono del trabajo">
+            <input matInput type="tel" formControlName="telefonoTrabajo" required placeholder="Teléfono del trabajo">
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-tercio">
             <mat-label>Tipo de contrato</mat-label>
-            <mat-select name="tipoContrato" required>
+            <mat-select formControlName="tipoContrato" required>
               <mat-option value="INDEFINIDO">Indefinido</mat-option>
               <mat-option value="DEFINIDO">Definido</mat-option>
               <mat-option value="PRESTACION">Prestación de servicios</mat-option>
@@ -231,7 +231,7 @@
             <span matTextPrefix>$ </span>
             <input matInput
                    type="text"
-                   name="salario"
+                   formControlName="salario"
                    required
                    placeholder="0.00"
                    (input)="formatCurrency($event, 'salario')"
@@ -253,7 +253,7 @@
         <div class="campos-row">
           <mat-form-field appearance="outline" class="campo-completo">
             <mat-label>Código oficina</mat-label>
-            <input matInput name="codOficina" required placeholder="Código de oficina">
+            <input matInput formControlName="codOficina" required placeholder="Código de oficina">
           </mat-form-field>
         </div>
       </div>
@@ -271,7 +271,7 @@
             <span matTextPrefix>$ </span>
             <input matInput
                    type="text"
-                   name="valorAporte"
+                   formControlName="valorAporte"
                    placeholder="0.00"
                    (input)="formatCurrency($event, 'valorAporte')"
                    (blur)="formatCurrencyOnBlur($event, 'valorAporte')"
@@ -282,7 +282,7 @@
 
           <mat-form-field appearance="outline" class="campo-medio">
             <mat-label>Periodicidad</mat-label>
-            <mat-select name="periodicidad">
+            <mat-select formControlName="periodicidad">
               <mat-option value="MENSUAL">Mensual</mat-option>
               <mat-option value="QUINCENAL">Quincenal</mat-option>
               <mat-option value="SEMANAL">Semanal</mat-option>
@@ -294,12 +294,12 @@
         <div class="campos-row">
           <mat-form-field appearance="outline" class="campo-medio">
             <mat-label>Fecha próximo pago</mat-label>
-            <input matInput type="date" name="fechaProximoPago" placeholder="MM/DD/YYYY">
+            <input matInput type="date" formControlName="fechaProximoPago" placeholder="MM/DD/YYYY">
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="campo-medio">
             <mat-label>Forma de pago</mat-label>
-            <mat-select name="formaPago">
+            <mat-select formControlName="formaPago">
               <mat-option value="EFECTIVO">Efectivo</mat-option>
               <mat-option value="TRANSFERENCIA">Transferencia</mat-option>
               <mat-option value="CHEQUE">Cheque</mat-option>

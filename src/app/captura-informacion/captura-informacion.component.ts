@@ -41,14 +41,20 @@ export class CapturaInformacionComponent implements OnInit, OnDestroy {
   @Input() tituloProceso: string = 'Captura de Información';
   @Output() continuar = new EventEmitter<any>();
 
-  documentosForm: FormGroup;
-
+  // FormGroup principal del formulario
+  formularioPrincipal: FormGroup;
 
   // Controles de autocomplete para ciudades
   ciudadExpedicionControl = new FormControl();
   ciudadNacimientoControl = new FormControl();
   ciudadResidenciaControl = new FormControl();
   ciudadTrabajoControl = new FormControl();
+
+  // Almacenar ciudades seleccionadas
+  ciudadExpedicionSeleccionada: Ciudad | null = null;
+  ciudadNacimientoSeleccionada: Ciudad | null = null;
+  ciudadResidenciaSeleccionada: Ciudad | null = null;
+  ciudadTrabajoSeleccionada: Ciudad | null = null;
 
   // Observables para filtrado de ciudades
   ciudadesFiltradas!: Observable<Ciudad[]>;
@@ -72,10 +78,40 @@ export class CapturaInformacionComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private capturaInformacionService: CapturaInformacionService
   ) {
-    this.documentosForm = this.fb.group({
-      cedulaCopia: ['', Validators.required],
-      comprobanteIngresos: ['', Validators.required],
-      referencias: ['', Validators.required]
+    // Inicializar formulario principal con todos los campos
+    this.formularioPrincipal = this.fb.group({
+      // Información Personal
+      tipoIdentificacion: ['', Validators.required],
+      identificacion: ['', Validators.required],
+      sexo: ['', Validators.required],
+      primerNombre: ['', Validators.required],
+      segundoNombre: ['', Validators.required],
+      primerApellido: ['', Validators.required],
+      segundoApellido: ['', Validators.required],
+      fechaExpedicion: ['', Validators.required],
+      estadoCivil: ['', Validators.required],
+      fechaNacimiento: ['', Validators.required],
+      direccionResidencia: ['', Validators.required],
+      telefonoResidencia: ['', Validators.required],
+      movil: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+
+      // Información Laboral
+      sitioTrabajo: ['', Validators.required],
+      cargo: ['', Validators.required],
+      direccionTrabajo: ['', Validators.required],
+      telefonoTrabajo: ['', Validators.required],
+      tipoContrato: ['', Validators.required],
+      salario: ['', Validators.required],
+
+      // Información Adicional
+      codOficina: ['', Validators.required],
+
+      // Información Financiera Opcional
+      valorAporte: [''],
+      periodicidad: [''],
+      fechaProximoPago: [''],
+      formaPago: ['']
     });
 
     // Inicializar observables de autocomplete - todos usan la misma fuente
@@ -157,19 +193,19 @@ export class CapturaInformacionComponent implements OnInit, OnDestroy {
   onCiudadSeleccionada(ciudad: Ciudad, campo: string): void {
     console.log(`Ciudad seleccionada para ${campo}:`, ciudad);
 
-    // Aquí puedes agregar lógica adicional según el campo
+    // Guardar la ciudad seleccionada según el campo
     switch (campo) {
       case 'expedicion':
-        // Lógica específica para expedición
+        this.ciudadExpedicionSeleccionada = ciudad;
         break;
       case 'nacimiento':
-        // Lógica específica para nacimiento
+        this.ciudadNacimientoSeleccionada = ciudad;
         break;
       case 'residencia':
-        // Lógica específica para residencia
+        this.ciudadResidenciaSeleccionada = ciudad;
         break;
       case 'trabajo':
-        // Lógica específica para trabajo
+        this.ciudadTrabajoSeleccionada = ciudad;
         break;
     }
   }
@@ -227,8 +263,72 @@ export class CapturaInformacionComponent implements OnInit, OnDestroy {
   }
 
   onContinuar() {
-    console.log('Documentos capturados:');
-    this.continuar.emit();
+    // Recopilar todos los datos del formulario
+    const datosFormulario: any = {
+      // Información Personal
+      tipoIdentificacion: this.formularioPrincipal.get('tipoIdentificacion')?.value,
+      identificacion: this.formularioPrincipal.get('identificacion')?.value,
+      sexo: this.formularioPrincipal.get('sexo')?.value,
+      primerNombre: this.formularioPrincipal.get('primerNombre')?.value,
+      segundoNombre: this.formularioPrincipal.get('segundoNombre')?.value,
+      primerApellido: this.formularioPrincipal.get('primerApellido')?.value,
+      segundoApellido: this.formularioPrincipal.get('segundoApellido')?.value,
+      fechaExpedicion: this.formularioPrincipal.get('fechaExpedicion')?.value,
+      estadoCivil: this.formularioPrincipal.get('estadoCivil')?.value,
+      fechaNacimiento: this.formularioPrincipal.get('fechaNacimiento')?.value,
+      direccionResidencia: this.formularioPrincipal.get('direccionResidencia')?.value,
+      telefonoResidencia: this.formularioPrincipal.get('telefonoResidencia')?.value,
+      movil: this.formularioPrincipal.get('movil')?.value,
+      email: this.formularioPrincipal.get('email')?.value,
+
+      // Ciudades seleccionadas con código DANE
+      ciudadExpedicion: this.ciudadExpedicionSeleccionada ? {
+        ciudad: this.ciudadExpedicionSeleccionada.ciudad,
+        departamento: this.ciudadExpedicionSeleccionada.departamento,
+        codigoDane: this.ciudadExpedicionSeleccionada.codigo_Dane
+      } : undefined,
+      ciudadNacimiento: this.ciudadNacimientoSeleccionada ? {
+        ciudad: this.ciudadNacimientoSeleccionada.ciudad,
+        departamento: this.ciudadNacimientoSeleccionada.departamento,
+        codigoDane: this.ciudadNacimientoSeleccionada.codigo_Dane
+      } : undefined,
+      ciudadResidencia: this.ciudadResidenciaSeleccionada ? {
+        ciudad: this.ciudadResidenciaSeleccionada.ciudad,
+        departamento: this.ciudadResidenciaSeleccionada.departamento,
+        codigoDane: this.ciudadResidenciaSeleccionada.codigo_Dane
+      } : undefined,
+      ciudadTrabajo: this.ciudadTrabajoSeleccionada ? {
+        ciudad: this.ciudadTrabajoSeleccionada.ciudad,
+        departamento: this.ciudadTrabajoSeleccionada.departamento,
+        codigoDane: this.ciudadTrabajoSeleccionada.codigo_Dane
+      } : undefined,
+
+      // Información Laboral
+      sitioTrabajo: this.formularioPrincipal.get('sitioTrabajo')?.value,
+      cargo: this.formularioPrincipal.get('cargo')?.value,
+      direccionTrabajo: this.formularioPrincipal.get('direccionTrabajo')?.value,
+      telefonoTrabajo: this.formularioPrincipal.get('telefonoTrabajo')?.value,
+      tipoContrato: this.formularioPrincipal.get('tipoContrato')?.value,
+      salario: this.formularioPrincipal.get('salario')?.value,
+
+      // Información Adicional
+      codOficina: this.formularioPrincipal.get('codOficina')?.value,
+
+      // Información Financiera Opcional
+      valorAporte: this.formularioPrincipal.get('valorAporte')?.value,
+      periodicidad: this.formularioPrincipal.get('periodicidad')?.value,
+      fechaProximoPago: this.formularioPrincipal.get('fechaProximoPago')?.value,
+      formaPago: this.formularioPrincipal.get('formaPago')?.value,
+
+      // Campos Dinámicos
+      camposDinamicos: this.camposDinamicosForm.value
+    };
+
+    // Guardar en el servicio
+    this.capturaInformacionService.guardarDatosFormulario(datosFormulario);
+
+    // Emitir evento para continuar
+    this.continuar.emit(datosFormulario);
   }
 
   // ===== MÉTODOS PARA CAMPOS DINÁMICOS =====
