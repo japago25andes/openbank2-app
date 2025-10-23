@@ -4,12 +4,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FirmaService } from './firma.service';
 import { CapturaInformacionService } from '../captura-informacion/captura-informacion.service';
 import { DatosFormularioCaptura } from '../captura-informacion/captura-informacion.interface';
 import { PDFDocument } from 'pdf-lib';
+import { MensajeComponent } from '../mensaje/mensaje.component';
 
 @Component({
   selector: 'app-firma',
@@ -22,6 +24,7 @@ import { PDFDocument } from 'pdf-lib';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatDialogModule,
     FormsModule
   ]
 })
@@ -42,7 +45,8 @@ export class FirmaComponent implements OnInit, AfterViewInit {
   constructor(
     private firmaService: FirmaService,
     private sanitizer: DomSanitizer,
-    private capturaInformacionService: CapturaInformacionService
+    private capturaInformacionService: CapturaInformacionService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -161,8 +165,24 @@ export class FirmaComponent implements OnInit, AfterViewInit {
       this.isValidating = false;
       console.log('✅ OTP validado correctamente (mock)');
 
-      // Redirigir a la página de Canapro después de validación exitosa
-      window.location.href = 'https://www.canapro.com.co/';
+      // Mostrar popup de vinculación exitosa
+      const dialogRef = this.dialog.open(MensajeComponent, {
+        width: '400px',
+        disableClose: true,
+        data: {
+          titulo: '¡Felicitaciones!',
+          descripcion: 'Vinculación exitosa.',
+          boton: 'Aceptar',
+          url: 'https://www.canapro.coop/'
+        }
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result === 'aceptar') {
+          console.log('✅ Usuario aceptó, redirigiendo a Canapro...');
+          window.location.href = 'https://www.canapro.coop/';
+        }
+      });
     }, 1500);
   }
 
@@ -205,9 +225,9 @@ export class FirmaComponent implements OnInit, AfterViewInit {
       'txtsegundonombre_cliente': datosFormulario.segundoNombre || '',
       'txtprimerapellido_cliente': datosFormulario.primerApellido || '',
       'txtsegundoapellido_cliente': datosFormulario.segundoApellido || '',
-      'txtfechaexpediciondd': formatearFecha(datosFormulario.fechaExpedicion),
+      'txtfechaexpedicion': formatearFecha(datosFormulario.fechaExpedicion),
       'txtlugarexpedicion': datosFormulario.ciudadExpedicion?.ciudad || '',
-      'txtfechanacimientodd': formatearFecha(datosFormulario.fechaNacimiento),
+      'txtfechanacimiento': formatearFecha(datosFormulario.fechaNacimiento),
       'txtmunicipionacimiento': datosFormulario.ciudadNacimiento?.ciudad || '',
       'txtdepartamentonacimiento': datosFormulario.ciudadNacimiento?.departamento || '',
       'txtdirecciondeudor': datosFormulario.direccionResidencia || '',
@@ -215,13 +235,13 @@ export class FirmaComponent implements OnInit, AfterViewInit {
       'txtdepartamentoresidencia': datosFormulario.ciudadResidencia?.departamento || '',
       'txtfijodeudor': datosFormulario.telefonoResidencia || '',
       'txtmovildeudor': datosFormulario.movil || '',
+      'txtemaildeudor': datosFormulario.email || '',
 
       // Información Laboral
-      'txtempresa': datosFormulario.sitioTrabajo || '',
+      'Texto14': datosFormulario.sitioTrabajo || '',
       'txtcargo': datosFormulario.cargo || '',
       'txtdirecciontrabajo': datosFormulario.direccionTrabajo || '',
       'txtciudadtrabajo': datosFormulario.ciudadTrabajo?.ciudad || '',
-      'txtdepartamentotrabajo': datosFormulario.ciudadTrabajo?.departamento || '',
       'txtingreso': datosFormulario.salario || '',
 
       // Información Financiera
