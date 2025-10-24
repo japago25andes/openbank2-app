@@ -91,7 +91,7 @@ export class ValidacionOtpComponent implements AfterViewInit {
       next: (response) => {
         this.isValidating = false;
 
-        if (response.requiereCuestionario === "true") {
+        if (response.validacionExitosa === "true") {
           this.continuar.emit();
         } else {
           this.error.emit(response.mensajeValidacion || 'Código OTP incorrecto');
